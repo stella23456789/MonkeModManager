@@ -13,6 +13,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install .NET Framework 4.5 Developer Pack
+        run: choco install netfx-4.5.2-devpack -y
+
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
 
