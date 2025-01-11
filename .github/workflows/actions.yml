@@ -14,7 +14,11 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install .NET Framework 4.5 Developer Pack
-        run: choco install netfx-4.5.2-devpack -y
+        shell: powershell
+        run: |
+          $ErrorActionPreference = "Stop"
+          Invoke-WebRequest -Uri https://download.microsoft.com/download/4/0/3/403D0DE8-2F8B-4BA3-99F2-CBB982A162E7/dotnetfx45_full_x86_x64.exe -OutFile dotnetfx45.exe
+          Start-Process -FilePath .\dotnetfx45.exe -ArgumentList "/quiet /norestart" -NoNewWindow -Wait
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.2
