@@ -9,58 +9,47 @@
          "group" : "Core"
       },
       {
-         "name" : "Gorilla Cosmetics",
+         "name" : "Custom Cosmetics",
          "tag" : "",
-         "gitPath" : "legoandmars/GorillaCosmetics",
+         "gitPath" : "wryser/CustomCosmetics",
          "releaseId" : 0,
-         "author" : "Bobbie",
+         "author" : "wryser",
          "group" : "Cosmetic",
          "dependencies" : [
-          "Newtonsoft.JSON"
+          "BananaOS"
          ]
-      },
-      {
-         "name" : "Monke Map Loader",
-         "tag" : "",
-         "gitPath" : "Vadix88/MonkeMapLoader",
-         "releaseId" : 0,
-         "author" : "Vadix",
-         "group" : "Gameplay",
-         "dependencies" : [
-          "Newtonsoft.JSON",
-          "Utilla",
-          "Computer Interface"
-         ]
-      },
-      {
-         "name" : "Space Monke",
-         "tag" : "",
-         "gitPath" : "legoandmars/SpaceMonke",
-         "releaseId" : 0,
-         "author" : "Bobbie",
-         "group" : "Gameplay",
-         "dependencies" : [
-           "Utilla"
-          ]
       },
       {
          "name" : "Utilla",
          "tag" : "",
-         "gitPath" : "legoandmars/Utilla",
+         "gitPath" : "developer9998/Utilla",
          "releaseId" : 0,
-         "author" : "Bobbie",
+         "author" : "Dev9998",
          "group" : "Libraries"
       },
       {
-        "name" : "Computer Interface",
+         "name" : "BananaOS",
+         "tag" : "",
+         "gitPath" : "HuskyGT/Banana-OS",
+         "releaseId" : 0,
+         "author" : "HuskyGT",
+         "group" : "Libraries"
+      },
+      {
+        "name" : "Computer Interface Reloaded",
         "tag" : "",
-        "gitPath" : "ToniMacaroni/ComputerInterface",
+        "gitPath" : "NgbatzYT/ComputerInterfaceReloaded",
         "releaseId": 0,
-        "author" : "Toni Macaroni",
+        "author" : "NgbatzYT",
         "group" : "Libraries",
-        "dependencies" : [
-          "Bepinject"
-        ]
+      },
+            {
+        "name" : "SophiticatedCube",
+        "tag" : "",
+        "gitPath" : "NgbatzYT/SophisticatedCube",
+        "releaseId": 0,
+        "author" : "NgbatzYT",
+        "group" : "Gameplay",
       },
       {
         "name" : "Bepinject",
@@ -82,14 +71,6 @@
         "author" : "svermeulen",
         "group" : "Libraries",
         "installPath" : "BepInEx/plugins"
-      },
-      {
-         "name" : "Newtonsoft.JSON",
-         "tag" : "",
-         "gitPath" : "legoandmars/Newtonsoft.Json",
-         "releaseId" : 0,
-         "author" : "James Newton-King",
-         "group" : "Libraries"
       }
    ],
    "groups" : [
