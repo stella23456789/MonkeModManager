@@ -68,8 +68,8 @@ namespace MonkeModManager
         private void LoadReleases()
         {
 #if !DEBUG
-            var decodedMods = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/DeadlyKitten/MonkeModInfo/master/modinfo.json"));
-            var decodedGroups = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/DeadlyKitten/MonkeModInfo/master/groupinfo.json"));
+            var decodedMods = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModInfo/master/modinfo.json"));
+            var decodedGroups = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModInfo/master/groupinfo.json"));
 #else
             var decoded = JSON.Parse(File.ReadAllText("C:/Users/Steven/Desktop/testmods.json"));
 #endif
