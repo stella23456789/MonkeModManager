@@ -42,6 +42,7 @@ namespace MonkeModManager
             // panel1
             // 
             this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel1.Location = new System.Drawing.Point(540, 186);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(248, 252);
@@ -52,7 +53,7 @@ namespace MonkeModManager
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(12, 12);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(464, 424);
+            this.checkedListBox1.Size = new System.Drawing.Size(522, 424);
             this.checkedListBox1.TabIndex = 1;
             // 
             // button1
@@ -88,9 +89,9 @@ namespace MonkeModManager
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(540, 80);
+            this.label2.Location = new System.Drawing.Point(540, 31);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(248, 45);
+            this.label2.Size = new System.Drawing.Size(248, 94);
             this.label2.TabIndex = 5;
             this.label2.Text = "Only change the config if you know what you\'re doing.";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;

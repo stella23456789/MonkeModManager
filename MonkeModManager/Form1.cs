@@ -7,8 +7,10 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using MonkeModManager.Internals;
 using MonkeModManager.Internals.SimpleJSON;
+using Microsoft.VisualBasic;
 
 namespace MonkeModManager
 {
@@ -22,6 +24,11 @@ namespace MonkeModManager
         private List<ReleaseInfo> releases;
         private bool modsDisabled;
         private string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
+        private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
+        private int CurrentVersion = 2;
+        public bool InstanceEnabled;
+        public bool ExperimentalEnabled;
+        public bool AutoUpdateEnabled;
         
         public Form1()
         {
@@ -59,50 +66,105 @@ namespace MonkeModManager
 
         private void Install()
         {
-            ChangeInstallButtonState(false);
-            UpdateStatus("Starting install sequence...");
-            foreach (ReleaseInfo release in releases)
+            if (InstanceEnabled)
             {
-                if (release.Install)
+                UpdateStatus("Changing Unity Doorstop config");
+                DoorstopInstanceChange(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{checkedListBox1.CheckedItems[0]}\BepInEx\core\BepInEx.Preloader.dll"));
+                ChangeInstallButtonState(false);
+                UpdateStatus("Starting install sequence...");
+                foreach (ReleaseInfo release in releases)
                 {
-                    UpdateStatus(string.Format("Downloading...{0}", release.Name));
-                    byte[] file = DownloadFile(release.Link);
-                    UpdateStatus(string.Format("Installing...{0}", release.Name));
-                    string fileName = Path.GetFileName(release.Link);
-                    if (Path.GetExtension(fileName).Equals(".dll"))
+                    if (release.Install)
                     {
-                        string dir;
-                        if (release.InstallLocation == null)
+                        UpdateStatus(string.Format("Downloading...{0}", release.Name));
+                        byte[] file = DownloadFile(release.Link);
+                        UpdateStatus(string.Format("Installing...{0}", release.Name));
+                        string fileName = Path.GetFileName(release.Link);
+                        if (Path.GetExtension(fileName).Equals(".dll"))
                         {
-                            dir = Path.Combine(InstallDirectory, @"BepInEx\plugins", Regex.Replace(release.Name, @"\s+", string.Empty));
-                            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                            string dir;
+                            if (release.InstallLocation == null)
+                            {
+                                dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{checkedListBox1.CheckedItems[0]}\BepInEx\plugins", Regex.Replace(release.Name, @"\s+", string.Empty));
+                                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                            }
+                            else
+                            {
+                                dir = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\mmmInstances\{checkedListBox1.CheckedItems[0]}\", release.InstallLocation);
+                            }
+                            File.WriteAllBytes(Path.Combine(dir, fileName), file);
+
+                            var dllFile = Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\mmmInstances\{checkedListBox1.CheckedItems[0]}\", @"BepInEx\plugins", fileName);
+                            if (File.Exists(dllFile))
+                            {
+                                File.Delete(dllFile);
+                            }
                         }
                         else
                         {
-                            dir = Path.Combine(InstallDirectory, release.InstallLocation);
+                            UnzipFile(file, (release.InstallLocation != null) ? Path.Combine($@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\mmmInstances\{checkedListBox1.CheckedItems[0]}\", release.InstallLocation) : $@"{Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)}\mmmInstances\{checkedListBox1.CheckedItems[0]}\");
                         }
-                        File.WriteAllBytes(Path.Combine(dir, fileName), file);
-
-                        var dllFile = Path.Combine(InstallDirectory, @"BepInEx\plugins", fileName);
-                        if (File.Exists(dllFile))
-                        {
-                            File.Delete(dllFile);
-                        }
+                        UpdateStatus(string.Format("Installed {0}!", release.Name));
                     }
-                    else
-                    {
-                        UnzipFile(file, (release.InstallLocation != null) ? Path.Combine(InstallDirectory, release.InstallLocation) : InstallDirectory);
-                    }
-                    UpdateStatus(string.Format("Installed {0}!", release.Name));
                 }
-            }
-            UpdateStatus("Install complete!");
-            ChangeInstallButtonState(true);
+                UpdateStatus("Install complete!");
+                ChangeInstallButtonState(true);
 
-            this.Invoke((MethodInvoker)(() =>
-            { //Invoke so we can call from any thread
-                buttonToggleMods.Enabled = true;
-            }));
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    //Invoke so we can call from any thread
+                    buttonToggleMods.Enabled = true;
+                }));
+            }
+            else
+            {
+                DoorstopInstanceChange(DefaultDoorstopPath);
+                ChangeInstallButtonState(false);
+                UpdateStatus("Starting install sequence...");
+                foreach (ReleaseInfo release in releases)
+                {
+                    if (release.Install)
+                    {
+                        UpdateStatus(string.Format("Downloading...{0}", release.Name));
+                        byte[] file = DownloadFile(release.Link);
+                        UpdateStatus(string.Format("Installing...{0}", release.Name));
+                        string fileName = Path.GetFileName(release.Link);
+                        if (Path.GetExtension(fileName).Equals(".dll"))
+                        {
+                            string dir;
+                            if (release.InstallLocation == null)
+                            {
+                                dir = Path.Combine(InstallDirectory, @"BepInEx\plugins", Regex.Replace(release.Name, @"\s+", string.Empty));
+                                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                            }
+                            else
+                            {
+                                dir = Path.Combine(InstallDirectory, release.InstallLocation);
+                            }
+                            File.WriteAllBytes(Path.Combine(dir, fileName), file);
+
+                            var dllFile = Path.Combine(InstallDirectory, @"BepInEx\plugins", fileName);
+                            if (File.Exists(dllFile))
+                            {
+                                File.Delete(dllFile);
+                            }
+                        }
+                        else
+                        {
+                            UnzipFile(file, (release.InstallLocation != null) ? Path.Combine(InstallDirectory, release.InstallLocation) : InstallDirectory);
+                        }
+                        UpdateStatus(string.Format("Installed {0}!", release.Name));
+                    }
+                }
+                UpdateStatus("Install complete!");
+                ChangeInstallButtonState(true);
+
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    //Invoke so we can call from any thread
+                    buttonToggleMods.Enabled = true;
+                }));
+            }
         }
         
         private void UnzipFile(byte[] data, string directory)
@@ -317,6 +379,8 @@ namespace MonkeModManager
             
             ConfigFix();
             
+            AddInstancesToList();
+            
             if (!File.Exists(Path.Combine(InstallDirectory, "winhttp.dll")))
             {
                 if (File.Exists(Path.Combine(InstallDirectory, "mods.disable")))
@@ -423,6 +487,7 @@ namespace MonkeModManager
             }
         }
         
+        
         public static void ConfigFix()
         {
             if (!File.Exists(Path.Combine(InstallDirectory, @"BepInEx\config\BepInEx.cfg")))
@@ -438,6 +503,19 @@ namespace MonkeModManager
                
             string e = c.Replace("HideManagerGameObject = false", "HideManagerGameObject = true");
             File.WriteAllText(Path.Combine(InstallDirectory, @"BepInEx\config\BepInEx.cfg"), e);
+        }        
+        
+        public static void DoorstopInstanceChange(string InstancePath)
+        {
+            if (!File.Exists(Path.Combine(InstallDirectory, @"doorstop_config.ini")))
+            {
+                return;
+            }
+
+            string c = File.ReadAllText(Path.Combine(InstallDirectory, @"doorstop_config.ini"));
+               
+            string e = c.Replace(@"target_assembly=BepInEx\core\BepInEx.Preloader.dll", $@"target_assembly={InstancePath}");
+            File.WriteAllText(Path.Combine(InstallDirectory, @"doorstop_config.ini"), e);
         }
         private void button1_Click(object sender, EventArgs e)
         {
@@ -447,7 +525,7 @@ namespace MonkeModManager
 
         private void MmmConfig()
         {
-            string MMMPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);;
+            string MMMPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             
             string confPath = Path.Combine(MMMPath, "MMM.config.conf");
             
@@ -468,6 +546,21 @@ namespace MonkeModManager
                     InstallDirectory = @value;
                 }
                 break;
+            }
+        }
+
+        private void AddInstancesToList()
+        {
+            string instancesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "mmmInstances");
+            
+            checkedListBox1.Items.Clear();
+
+            checkedListBox1.Items.Add("Default Game Instance");
+            
+            foreach (var directory in Directory.GetDirectories(instancesPath))
+            {
+                string folderName = Path.GetFileName(directory);
+                checkedListBox1.Items.Add(folderName);
             }
         }
         
@@ -604,6 +697,127 @@ namespace MonkeModManager
             else
             {
                 File.WriteAllLines(configFilePath, lines);
+            }
+        }
+        private void Instance_Click(object sender, EventArgs e)
+        {
+            string result = ShowInputDialog("Enter the name for your new Instance.", "Instance Creator");
+
+            if (string.IsNullOrEmpty(result))
+            {
+                MessageBox.Show("Instance name can't be null.", "Instance Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}")))
+            {
+                MessageBox.Show("Instance name is already in use. Try a different name.", "Instance Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}")))
+            {
+                if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"mmmInstances")))
+                {
+                    Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"mmmInstances"));
+                }
+                
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}"));
+                byte[] file = DownloadFile("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip");
+                UnzipFile(file, Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}"));
+                if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}\BepInEx\config")))
+                {
+                    Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}\BepInEx\config"));
+                    File.Copy(Path.Combine(InstallDirectory, @"BepInEx\config\BepInEx.cfg"), Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}\BepInEx\config\BepInEx.cfg"));
+                }
+                DoorstopInstanceChange(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}\BepInEx\core\BepInEx.Preloader.dll"));
+                UpdateStatus("Instance Creation Success!");
+            }
+        }
+        
+        private void RefrshIns_Click(object sender, EventArgs e)
+        {
+            AddInstancesToList();
+        }
+        
+        static string ShowInputDialog(string prompt, string title)
+        {
+            Form form = new Form()
+            {
+                Width = 300,
+                Height = 150,
+                Text = title,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                StartPosition = FormStartPosition.CenterScreen,
+                MinimizeBox = false,
+                MaximizeBox = false
+            };
+
+            Label label = new Label() { Left = 10, Top = 10, Text = prompt, AutoSize = true };
+            TextBox textBox = new TextBox() { Left = 10, Top = 30, Width = 260 };
+            Button btnOK = new Button() { Text = "OK", Left = 110, Width = 80, Top = 60, DialogResult = DialogResult.OK };
+            Button btnCancel = new Button() { Text = "Cancel", Left = 200, Width = 80, Top = 60, DialogResult = DialogResult.Cancel };
+
+            form.Controls.Add(label);
+            form.Controls.Add(textBox);
+            form.Controls.Add(btnOK);
+            form.Controls.Add(btnCancel);
+
+            form.AcceptButton = btnOK;
+            form.CancelButton = btnCancel;
+
+            btnOK.Click += (sender, e) => form.Close();
+            btnCancel.Click += (sender, e) => { textBox.Text = ""; form.Close(); };
+
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                return textBox.Text;
+            }
+            return "";
+        }
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                var result = MessageBox.Show("Are you sure you want to enable Instances.", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
+                {
+                    InstanceEnabled = true;
+                }
+                else
+                {
+                    checkBox1.Checked = false;
+                }
+            }
+        }
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (checkedListBox1.CheckedItems.Count > 0)
+            {
+                string checkedItem = checkedListBox1.CheckedItems[0].ToString();
+                Directory.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{checkedItem}"), true);
+                UpdateStatus($"Delete Instance: {checkedItem}");
+            }
+        }
+        
+        private void checkedListBox1_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            for (int i = 0; i < checkedListBox1.Items.Count; i++)
+            {
+                if (i != e.Index)
+                {
+                    checkedListBox1.SetItemChecked(i, false);
+                }
+            }
+        }
+        private void button3_Click(object sender, EventArgs e)
+        {
+            UpdateStatus("Checking for updates...");
+            Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+            if (version > CurrentVersion)
+            {
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    MessageBox.Show("A new version is available! Please download it for the latest features.", "Update available!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    Process.Start("https://github.com/NgbatzYT/MonkeModManager/releases/latest");
+                }));
             }
         }
     }

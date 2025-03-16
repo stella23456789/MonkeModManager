@@ -54,14 +54,27 @@
             this.buttonOpenGameFolder = new System.Windows.Forms.Button();
             this.labelOpen = new System.Windows.Forms.Label();
             this.buttonUninstallAll = new System.Windows.Forms.Button();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.RefrshIns = new System.Windows.Forms.Button();
+            this.instanceButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.buttonModInfo = new System.Windows.Forms.Button();
             this.buttonToggleMods = new System.Windows.Forms.Button();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.jToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.Plugins.SuspendLayout();
             this.contextMenuStripMain.SuspendLayout();
             this.Utilities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxDirectory
@@ -120,6 +133,8 @@
             this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.Plugins);
             this.tabControlMain.Controls.Add(this.Utilities);
+            this.tabControlMain.Controls.Add(this.tabPage1);
+            this.tabControlMain.Controls.Add(this.tabPage2);
             this.tabControlMain.Location = new System.Drawing.Point(10, 53);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
@@ -313,6 +328,96 @@
             this.buttonUninstallAll.UseVisualStyleBackColor = true;
             this.buttonUninstallAll.Click += new System.EventHandler(this.buttonUninstallAll_Click);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.checkedListBox1);
+            this.tabPage1.Controls.Add(this.button2);
+            this.tabPage1.Controls.Add(this.RefrshIns);
+            this.tabPage1.Controls.Add(this.instanceButton);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(536, 256);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Instances";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Items.AddRange(new object[]
+            {
+                "Default Game Instance"
+            });
+            this.checkedListBox1.Location = new System.Drawing.Point(3, 4);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(527, 225);
+            this.checkedListBox1.TabIndex = 4;
+            this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(155, 232);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(226, 21);
+            this.button2.TabIndex = 3;
+            this.button2.Text = "Remove Selected Instance";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // RefrshIns
+            // 
+            this.RefrshIns.Location = new System.Drawing.Point(387, 232);
+            this.RefrshIns.Name = "RefrshIns";
+            this.RefrshIns.Size = new System.Drawing.Size(143, 21);
+            this.RefrshIns.TabIndex = 2;
+            this.RefrshIns.Text = "Refresh Instances";
+            this.RefrshIns.UseVisualStyleBackColor = true;
+            this.RefrshIns.Click += new System.EventHandler(this.RefrshIns_Click);
+            // 
+            // instanceButton
+            // 
+            this.instanceButton.Location = new System.Drawing.Point(6, 232);
+            this.instanceButton.Name = "instanceButton";
+            this.instanceButton.Size = new System.Drawing.Size(143, 21);
+            this.instanceButton.TabIndex = 0;
+            this.instanceButton.Text = "Create New Instance";
+            this.instanceButton.UseVisualStyleBackColor = true;
+            this.instanceButton.Click += new System.EventHandler(this.Instance_Click);
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.button3);
+            this.tabPage2.Controls.Add(this.checkBox1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(536, 256);
+            this.tabPage2.TabIndex = 3;
+            this.tabPage2.Text = "Settings";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(6, 227);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(115, 23);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Check for updates";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.ForeColor = System.Drawing.Color.Black;
+            this.checkBox1.Location = new System.Drawing.Point(6, 6);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(160, 24);
+            this.checkBox1.TabIndex = 0;
+            this.checkBox1.Text = "Use Intances";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
             // buttonModInfo
             // 
             this.buttonModInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -336,6 +441,21 @@
             this.buttonToggleMods.Text = "Disable Mods";
             this.buttonToggleMods.UseVisualStyleBackColor = true;
             this.buttonToggleMods.Click += new System.EventHandler(this.buttonToggleMods_Click);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
+            {
+                this.jToolStripMenuItem
+            });
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(140, 26);
+            // 
+            // jToolStripMenuItem
+            // 
+            this.jToolStripMenuItem.Name = "jToolStripMenuItem";
+            this.jToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.jToolStripMenuItem.Text = "List Instance";
             // 
             // Form1
             // 
@@ -364,9 +484,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem jToolStripMenuItem;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button RefrshIns;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Button instanceButton;
         private System.Windows.Forms.Button button1;
 
         #endregion
