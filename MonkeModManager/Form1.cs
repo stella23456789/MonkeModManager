@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -25,7 +25,7 @@ namespace MonkeModManager
         private bool modsDisabled;
         private string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 2;
+        private int CurrentVersion = 3; // actual version is 2.0.1 aka a hotfix
         public bool InstanceEnabled;
         public bool ExperimentalEnabled;
         public bool AutoUpdateEnabled;
@@ -551,11 +551,12 @@ namespace MonkeModManager
 
         private void AddInstancesToList()
         {
+            
             string instancesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "mmmInstances");
+            if (!Directory.Exists(instancesPath))  
+                Directory.CreateDirectory(instancesPath);
             
             checkedListBox1.Items.Clear();
-
-            checkedListBox1.Items.Add("Default Game Instance");
             
             foreach (var directory in Directory.GetDirectories(instancesPath))
             {
