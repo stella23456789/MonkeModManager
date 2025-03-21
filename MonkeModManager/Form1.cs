@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -24,7 +24,7 @@ namespace MonkeModManager
         private bool modsDisabled;
         private string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 4; // actual version is 2.1.0
+        private int CurrentVersion = 2; // actual version is 2.1.0
         public bool InstanceEnabled;
         public bool AutoUpdateEnabled;
         public bool DarkMode;
@@ -360,8 +360,11 @@ namespace MonkeModManager
             File.WriteAllText(Path.Combine(path, "exepath.txt"), exePath);
             
             InstanceEnabled = Properties.Settings.Default.Instance;
+            checkBox1.Checked = InstanceEnabled;
             AutoUpdateEnabled = Properties.Settings.Default.AutoUpdate;
+            checkBox3.Checked = AutoUpdateEnabled;
             DarkMode = Properties.Settings.Default.DarkMode;
+            checkBox4.Checked = DarkMode;
             InstallDirectory = Properties.Settings.Default.InstallDirectory;
 
             if (DarkMode)
@@ -371,7 +374,7 @@ namespace MonkeModManager
             }
             checkBox1.Checked = InstanceEnabled;
             
-            releases = new List<ReleaseInfo>();
+            releases = [];
 
             labelVersion.Text = $"Monke Mod Manager v{VersionNumber}";
             
@@ -400,9 +403,13 @@ namespace MonkeModManager
             
             if (AutoUpdateEnabled)
             {
-                if (Directory.Exists(path))
+                UpdateStatus("Checking for updates...");
+                Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+                if (version > CurrentVersion)
                 {
-                    if(!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    if(!Directory.Exists(path))
+                        Directory.CreateDirectory(path);
+                    if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
                     {
                         try
                         {
@@ -415,46 +422,6 @@ namespace MonkeModManager
                         {
                             MessageBox.Show(se.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                             UpdateStatus("Failed to download Monke Updater");
-                        }
-                    }
-                    if (File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
-                    {
-                        UpdateStatus("Checking for updates...");
-                        Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
-                        if (version > CurrentVersion)
-                        {
-                            /*tring exePath = Process.GetCurrentProcess().MainModule.FileName;
-                            File.WriteAllText(path, exePath);*/
-                            Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
-                        }
-                    }
-                }
-                else
-                {
-                    Directory.CreateDirectory(path);
-                    if(!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
-                    {
-                        try
-                        {
-                            var mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
-                            UpdateStatus("Downloading Monke Updater");
-                            File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
-                            UpdateStatus("Installed Monke Updater");
-                        }
-                        catch (Exception se)
-                        {
-                            MessageBox.Show(se.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    if (File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
-                    {
-                        UpdateStatus("Checking for updates...");
-                        Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
-                        if (version > CurrentVersion)
-                        {
-                            /*string exePath = Process.GetCurrentProcess().MainModule.FileName;
-                            File.WriteAllText(path, exePath);*/
-                            Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
                         }
                     }
                 }
@@ -784,6 +751,7 @@ namespace MonkeModManager
                 Properties.Settings.Default.InstallDirectory = a;
                 InstallDirectory = Properties.Settings.Default.InstallDirectory;
             }
+            Properties.Settings.Default.Save();
         }
 
         private void AddInstancesToList()
@@ -913,6 +881,7 @@ namespace MonkeModManager
         {
             Properties.Settings.Default.InstallDirectory = e;
             InstallDirectory = Properties.Settings.Default.InstallDirectory;
+            Properties.Settings.Default.Save();
         }
         private void Instance_Click(object sender, EventArgs e)
         {
@@ -1040,29 +1009,19 @@ namespace MonkeModManager
             {
                 this.Invoke((MethodInvoker)(() =>
                 {
-                    DialogResult result = MessageBox.Show("A new version is available! Would you like to install it now?", "Update available!", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
-                    if (result != DialogResult.Yes)
-                        return;
                     string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MonkeUpdater");
-                    if (!Directory.Exists(path))
-                        return;
-                    if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
-                        return;
-                    UpdateStatus("Checking for updates...");
-                    short version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
-                    if (version <= CurrentVersion)
-                        return;
-                    
                     if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
                     {
                         byte[] mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
                         File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
+                        Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                        Application.Exit();
                     }
                     else
                     {
                         Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                        Application.Exit();
                     }
-
                 }));
             }
         }
@@ -1098,6 +1057,12 @@ namespace MonkeModManager
                 label3.Text = $@"Click Power: {ClickPower}";
             }
             else UpdateStatus("Not enough money!");
+        }
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.AutoUpdate = checkBox3.Checked;
+            AutoUpdateEnabled = Properties.Settings.Default.AutoUpdate;
+            Properties.Settings.Default.Save();
         }
     }
 }
