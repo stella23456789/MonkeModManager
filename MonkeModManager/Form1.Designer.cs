@@ -54,14 +54,22 @@
             this.buttonOpenGameFolder = new System.Windows.Forms.Button();
             this.labelOpen = new System.Windows.Forms.Label();
             this.buttonUninstallAll = new System.Windows.Forms.Button();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.Instances = new System.Windows.Forms.TabPage();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.RefrshIns = new System.Windows.Forms.Button();
             this.instanceButton = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.Settins = new System.Windows.Forms.TabPage();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.button3 = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.Experimental = new System.Windows.Forms.TabPage();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.BananaClicker = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.button4 = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.buttonModInfo = new System.Windows.Forms.Button();
             this.buttonToggleMods = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -72,8 +80,10 @@
             this.Utilities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.Instances.SuspendLayout();
+            this.Settins.SuspendLayout();
+            this.Experimental.SuspendLayout();
+            this.BananaClicker.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -133,8 +143,10 @@
             this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.Plugins);
             this.tabControlMain.Controls.Add(this.Utilities);
-            this.tabControlMain.Controls.Add(this.tabPage1);
-            this.tabControlMain.Controls.Add(this.tabPage2);
+            this.tabControlMain.Controls.Add(this.Instances);
+            this.tabControlMain.Controls.Add(this.Settins);
+            this.tabControlMain.Controls.Add(this.Experimental);
+            this.tabControlMain.Controls.Add(this.BananaClicker);
             this.tabControlMain.Location = new System.Drawing.Point(10, 53);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
@@ -328,27 +340,23 @@
             this.buttonUninstallAll.UseVisualStyleBackColor = true;
             this.buttonUninstallAll.Click += new System.EventHandler(this.buttonUninstallAll_Click);
             // 
-            // tabPage1
+            // Instances
             // 
-            this.tabPage1.Controls.Add(this.checkedListBox1);
-            this.tabPage1.Controls.Add(this.button2);
-            this.tabPage1.Controls.Add(this.RefrshIns);
-            this.tabPage1.Controls.Add(this.instanceButton);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(536, 256);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "Instances";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.Instances.Controls.Add(this.checkedListBox1);
+            this.Instances.Controls.Add(this.button2);
+            this.Instances.Controls.Add(this.RefrshIns);
+            this.Instances.Controls.Add(this.instanceButton);
+            this.Instances.Location = new System.Drawing.Point(4, 22);
+            this.Instances.Name = "Instances";
+            this.Instances.Padding = new System.Windows.Forms.Padding(3);
+            this.Instances.Size = new System.Drawing.Size(536, 256);
+            this.Instances.TabIndex = 2;
+            this.Instances.Text = "Instances";
+            this.Instances.UseVisualStyleBackColor = true;
             // 
             // checkedListBox1
             // 
             this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[]
-            {
-                "Default Game Instance"
-            });
             this.checkedListBox1.Location = new System.Drawing.Point(3, 4);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(527, 225);
@@ -385,17 +393,28 @@
             this.instanceButton.UseVisualStyleBackColor = true;
             this.instanceButton.Click += new System.EventHandler(this.Instance_Click);
             // 
-            // tabPage2
+            // Settins
             // 
-            this.tabPage2.Controls.Add(this.button3);
-            this.tabPage2.Controls.Add(this.checkBox1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(536, 256);
-            this.tabPage2.TabIndex = 3;
-            this.tabPage2.Text = "Settings";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.Settins.Controls.Add(this.checkBox3);
+            this.Settins.Controls.Add(this.button3);
+            this.Settins.Controls.Add(this.checkBox1);
+            this.Settins.Location = new System.Drawing.Point(4, 22);
+            this.Settins.Name = "Settins";
+            this.Settins.Padding = new System.Windows.Forms.Padding(3);
+            this.Settins.Size = new System.Drawing.Size(536, 256);
+            this.Settins.TabIndex = 3;
+            this.Settins.Text = "Settings";
+            this.Settins.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.ForeColor = System.Drawing.Color.Black;
+            this.checkBox3.Location = new System.Drawing.Point(6, 31);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(160, 19);
+            this.checkBox3.TabIndex = 3;
+            this.checkBox3.Text = "Auto-update";
+            this.checkBox3.UseVisualStyleBackColor = true;
             // 
             // button3
             // 
@@ -412,11 +431,82 @@
             this.checkBox1.ForeColor = System.Drawing.Color.Black;
             this.checkBox1.Location = new System.Drawing.Point(6, 6);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(160, 24);
+            this.checkBox1.Size = new System.Drawing.Size(160, 19);
             this.checkBox1.TabIndex = 0;
             this.checkBox1.Text = "Use Intances";
             this.checkBox1.UseVisualStyleBackColor = true;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            // 
+            // Experimental
+            // 
+            this.Experimental.Controls.Add(this.checkBox4);
+            this.Experimental.Location = new System.Drawing.Point(4, 22);
+            this.Experimental.Name = "Experimental";
+            this.Experimental.Padding = new System.Windows.Forms.Padding(3);
+            this.Experimental.Size = new System.Drawing.Size(536, 256);
+            this.Experimental.TabIndex = 4;
+            this.Experimental.Text = "Experimental";
+            this.Experimental.UseVisualStyleBackColor = true;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.Location = new System.Drawing.Point(6, 6);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(115, 22);
+            this.checkBox4.TabIndex = 0;
+            this.checkBox4.Text = "Dark Mode";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
+            // 
+            // BananaClicker
+            // 
+            this.BananaClicker.Controls.Add(this.label3);
+            this.BananaClicker.Controls.Add(this.label2);
+            this.BananaClicker.Controls.Add(this.button4);
+            this.BananaClicker.Controls.Add(this.panel1);
+            this.BananaClicker.Location = new System.Drawing.Point(4, 22);
+            this.BananaClicker.Name = "BananaClicker";
+            this.BananaClicker.Padding = new System.Windows.Forms.Padding(3);
+            this.BananaClicker.Size = new System.Drawing.Size(536, 256);
+            this.BananaClicker.TabIndex = 5;
+            this.BananaClicker.Text = "BananaClicker";
+            this.BananaClicker.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.Location = new System.Drawing.Point(6, 35);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(524, 27);
+            this.label3.TabIndex = 3;
+            this.label3.Text = "Click Power: 1";
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(6, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(524, 27);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Money: $0";
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(6, 227);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(218, 23);
+            this.button4.TabIndex = 1;
+            this.button4.Text = "Buy Monke (+0.1 Auto-clicks) - $5";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Location = new System.Drawing.Point(315, 79);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(215, 100);
+            this.panel1.TabIndex = 0;
+            this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
             // buttonModInfo
             // 
@@ -484,12 +574,22 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
+            this.Instances.ResumeLayout(false);
+            this.Settins.ResumeLayout(false);
+            this.Experimental.ResumeLayout(false);
+            this.BananaClicker.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TabPage BananaClicker;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.TabPage Experimental;
+        private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -497,8 +597,8 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button RefrshIns;
         private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabPage Instances;
+        private System.Windows.Forms.TabPage Settins;
         private System.Windows.Forms.Button instanceButton;
         private System.Windows.Forms.Button button1;
 

@@ -1,16 +1,15 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using MonkeModManager.Internals;
 using MonkeModManager.Internals.SimpleJSON;
-using Microsoft.VisualBasic;
 
 namespace MonkeModManager
 {
@@ -25,10 +24,14 @@ namespace MonkeModManager
         private bool modsDisabled;
         private string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 3; // actual version is 2.0.1 aka a hotfix
+        private int CurrentVersion = 4; // actual version is 2.1.0
         public bool InstanceEnabled;
-        public bool ExperimentalEnabled;
         public bool AutoUpdateEnabled;
+        public bool DarkMode;
+        public float ClickerMoney = 0f;
+        public float ClickPower = 1f;
+        public readonly string VersionNumber = "2.1.0";
+        private int monkeAmount = 5;
         
         public Form1()
         {
@@ -300,7 +303,7 @@ namespace MonkeModManager
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Something went wrong!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show($"Something went wrong! Error: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     UpdateStatus("Failed to uninstall mods.");
                     return;
                 }
@@ -350,11 +353,27 @@ namespace MonkeModManager
         }
         void Form1_Load(object sender, EventArgs e)
         {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MonkeUpdater");
+            if(!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+            string exePath = Process.GetCurrentProcess().MainModule.FileName;
+            File.WriteAllText(Path.Combine(path, "exepath.txt"), exePath);
+            
+            InstanceEnabled = Properties.Settings.Default.Instance;
+            AutoUpdateEnabled = Properties.Settings.Default.AutoUpdate;
+            DarkMode = Properties.Settings.Default.DarkMode;
+            InstallDirectory = Properties.Settings.Default.InstallDirectory;
+
+            if (DarkMode)
+            {
+                //DarkModeEnable();
+                checkBox4.Checked = Properties.Settings.Default.DarkMode;
+            }
+            checkBox1.Checked = InstanceEnabled;
+            
             releases = new List<ReleaseInfo>();
 
-            labelVersion.Text = "Monke Mod Manager v1.1";
-            
-            MmmConfig();
+            labelVersion.Text = $"Monke Mod Manager v{VersionNumber}";
             
             if (InstallDirectory != @"" && Directory.Exists(InstallDirectory))
             {
@@ -378,6 +397,68 @@ namespace MonkeModManager
             }
             
             ConfigFix();
+            
+            if (AutoUpdateEnabled)
+            {
+                if (Directory.Exists(path))
+                {
+                    if(!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    {
+                        try
+                        {
+                            var mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
+                            UpdateStatus("Downloading Monke Updater");
+                            File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
+                            UpdateStatus("Installed Monke Updater");
+                        }
+                        catch (Exception se)
+                        {
+                            MessageBox.Show(se.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            UpdateStatus("Failed to download Monke Updater");
+                        }
+                    }
+                    if (File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    {
+                        UpdateStatus("Checking for updates...");
+                        Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+                        if (version > CurrentVersion)
+                        {
+                            /*tring exePath = Process.GetCurrentProcess().MainModule.FileName;
+                            File.WriteAllText(path, exePath);*/
+                            Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                        }
+                    }
+                }
+                else
+                {
+                    Directory.CreateDirectory(path);
+                    if(!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    {
+                        try
+                        {
+                            var mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
+                            UpdateStatus("Downloading Monke Updater");
+                            File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
+                            UpdateStatus("Installed Monke Updater");
+                        }
+                        catch (Exception se)
+                        {
+                            MessageBox.Show(se.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+                    if (File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    {
+                        UpdateStatus("Checking for updates...");
+                        Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+                        if (version > CurrentVersion)
+                        {
+                            /*string exePath = Process.GetCurrentProcess().MainModule.FileName;
+                            File.WriteAllText(path, exePath);*/
+                            Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                        }
+                    }
+                }
+            }
             
             AddInstancesToList();
             
@@ -404,10 +485,150 @@ namespace MonkeModManager
                 LoadRequiredPlugins();
             }).Start();
         }
+        private void DarkModeEnable()
+        {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.BackColor = Color.FromArgb(30, 30, 30);
+            foreach (Control control in this.Controls)
+            {
+                SetDarkModeForControl(control);
+            }
+        }
 
+        private void DarkModeDisable()
+        {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.BackColor = SystemColors.Control;
+            foreach (Control control in this.Controls)
+            {
+                SetLightModeForControl(control);
+            }
+        }
+
+        private void SetDarkModeForControl(Control c)
+        {
+            c.ForeColor = Color.White;
+            c.BackColor = Color.FromArgb(45, 45, 48);
+
+            switch (c)
+            {
+                case Button b:
+                    b.FlatStyle = FlatStyle.Flat;
+                    b.FlatAppearance.BorderColor = Color.FromArgb(70, 70, 70);
+                    break;
+                case CheckBox cb:
+                    cb.FlatStyle = FlatStyle.Flat;
+                    break;
+                case RadioButton rb:
+                    rb.FlatStyle = FlatStyle.Flat;
+                    break;
+                case ListView lv:
+                    lv.BackColor = Color.FromArgb(30, 30, 30);
+                    lv.ForeColor = Color.White;
+                    break;
+                case DataGridView dgv:
+                    dgv.BackgroundColor = Color.FromArgb(30, 30, 30);
+                    dgv.ForeColor = Color.White;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48);
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+                    dgv.DefaultCellStyle.BackColor = Color.FromArgb(30, 30, 30);
+                    dgv.DefaultCellStyle.ForeColor = Color.White;
+                    dgv.EnableHeadersVisualStyles = false;
+                    break;
+                case TabControl tc:
+                    tc.DrawMode = TabDrawMode.OwnerDrawFixed;
+                    tc.DrawItem -= TabControl_DrawItem;
+                    tc.DrawItem += TabControl_DrawItem;
+                    break;
+                case CheckedListBox clb:
+                    clb.BackColor = Color.FromArgb(30, 30, 30);
+                    clb.ForeColor = Color.White;
+                    break;
+                case TextBox tb:
+                    tb.BackColor = Color.FromArgb(30, 30, 30);
+                    tb.ForeColor = Color.White;
+                    tb.BorderStyle = BorderStyle.FixedSingle;
+                    break;
+            }
+            if (!c.HasChildren)
+                return;
+            foreach (Control child in c.Controls)
+            {
+                SetDarkModeForControl(child);
+            }
+        }
+
+        private void SetLightModeForControl(Control c)
+        {
+            c.ForeColor = Color.Black;
+            c.BackColor = SystemColors.Control;
+
+            switch (c)
+            {
+                case Button b:
+                    b.FlatStyle = FlatStyle.Standard;
+                    break;
+                case CheckBox cb:
+                    cb.FlatStyle = FlatStyle.Standard;
+                    break;
+                case RadioButton rb:
+                    rb.FlatStyle = FlatStyle.Standard;
+                    break;
+                case ListView lv:
+                    lv.BackColor = SystemColors.Window;
+                    lv.ForeColor = Color.Black;
+                    break;
+                case DataGridView dgv:
+                    dgv.BackgroundColor = SystemColors.Window;
+                    dgv.ForeColor = Color.Black;
+                    dgv.ColumnHeadersDefaultCellStyle.BackColor = SystemColors.Control;
+                    dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+                    dgv.DefaultCellStyle.BackColor = SystemColors.Window;
+                    dgv.DefaultCellStyle.ForeColor = Color.Black;
+                    dgv.EnableHeadersVisualStyles = true;
+                    break;
+                case TabControl tc:
+                    tc.DrawMode = TabDrawMode.Normal;
+                
+                    tc.DrawItem -= TabControl_DrawItem;
+                    break;
+                case CheckedListBox clb:
+                    clb.BackColor = SystemColors.Window;
+                    clb.ForeColor = Color.Black;
+                    break;
+                case TextBox tb:
+                    tb.BackColor = SystemColors.Window;
+                    tb.ForeColor = Color.Black;
+                    tb.BorderStyle = BorderStyle.Fixed3D;
+                    break;
+            }
+            if (!c.HasChildren)
+                return;
+            foreach (Control child in c.Controls)
+            {
+                SetLightModeForControl(child);
+            }
+        }
+        
+        private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            TabControl tabControl = sender as TabControl;
+            if (tabControl == null) return;
+
+            TabPage tabPage = tabControl.TabPages[e.Index];
+            Rectangle tabRect = tabControl.GetTabRect(e.Index);
+
+            using Brush backBrush = new SolidBrush(Color.FromArgb(45, 45, 48));
+            using Brush foreBrush = new SolidBrush(Color.White);
+            e.Graphics.FillRectangle(backBrush, tabRect);
+            TextRenderer.DrawText(e.Graphics, tabPage.Text, e.Font, tabRect, Color.White);
+        }
+
+
+        
         private void UpdateStatus(string status)
         {
-            string formattedText = string.Format("Status: {0}", status);
+            string formattedText = $"Status: {status}";
             this.Invoke((MethodInvoker)(() =>
             { //Invoke so we can call from any thread
                 labelStatus.Text = formattedText;
@@ -505,7 +726,7 @@ namespace MonkeModManager
             File.WriteAllText(Path.Combine(InstallDirectory, @"BepInEx\config\BepInEx.cfg"), e);
         }        
         
-        public static void DoorstopInstanceChange(string InstancePath)
+        private static void DoorstopInstanceChange(string instancePath)
         {
             if (!File.Exists(Path.Combine(InstallDirectory, @"doorstop_config.ini")))
             {
@@ -514,7 +735,7 @@ namespace MonkeModManager
 
             string c = File.ReadAllText(Path.Combine(InstallDirectory, @"doorstop_config.ini"));
                
-            string e = c.Replace(@"target_assembly=BepInEx\core\BepInEx.Preloader.dll", $@"target_assembly={InstancePath}");
+            string e = c.Replace(@"target_assembly=BepInEx\core\BepInEx.Preloader.dll", $@"target_assembly={instancePath}");
             File.WriteAllText(Path.Combine(InstallDirectory, @"doorstop_config.ini"), e);
         }
         private void button1_Click(object sender, EventArgs e)
@@ -525,6 +746,7 @@ namespace MonkeModManager
 
         private void MmmConfig()
         {
+            /*
             string MMMPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             
             string confPath = Path.Combine(MMMPath, "MMM.config.conf");
@@ -546,6 +768,21 @@ namespace MonkeModManager
                     InstallDirectory = @value;
                 }
                 break;
+            }*/
+            
+            // Migration to new config system
+            string confPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
+            string[] content = File.ReadAllLines(confPath);
+
+            foreach (string line in content)
+            {
+                if (!line.StartsWith("InstallDirectory="))
+                    continue;
+                string a = line.Substring("InstallDirectory=".Length);
+                if (string.IsNullOrWhiteSpace(a))
+                    continue;
+                Properties.Settings.Default.InstallDirectory = a;
+                InstallDirectory = Properties.Settings.Default.InstallDirectory;
             }
         }
 
@@ -674,31 +911,8 @@ namespace MonkeModManager
 
         private void EditmmmConfig(string e)
         {
-            string newInstallDir = e;
-            
-            string[] lines = File.ReadAllLines(configFilePath);
-            bool found = false;
-            for (int i = 0; i < lines.Length; i++)
-            {
-                if (lines[i].StartsWith("InstallDirectory="))
-                {
-                    lines[i] = "InstallDirectory=" + newInstallDir;
-                    found = true;
-                    break;
-                }
-            }
-            
-            if (!found)
-            {
-                using (StreamWriter sw = File.AppendText(configFilePath))
-                {
-                    sw.WriteLine("InstallDirectory=" + newInstallDir);
-                }
-            }
-            else
-            {
-                File.WriteAllLines(configFilePath, lines);
-            }
+            Properties.Settings.Default.InstallDirectory = e;
+            InstallDirectory = Properties.Settings.Default.InstallDirectory;
         }
         private void Instance_Click(object sender, EventArgs e)
         {
@@ -766,11 +980,7 @@ namespace MonkeModManager
             btnOK.Click += (sender, e) => form.Close();
             btnCancel.Click += (sender, e) => { textBox.Text = ""; form.Close(); };
 
-            if (form.ShowDialog() == DialogResult.OK)
-            {
-                return textBox.Text;
-            }
-            return "";
+            return form.ShowDialog() == DialogResult.OK ? textBox.Text : "";
         }
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
@@ -785,6 +995,20 @@ namespace MonkeModManager
                 else
                 {
                     checkBox1.Checked = false;
+                }
+            }
+            else
+            {
+                var result = MessageBox.Show("Are you sure you want to disable Instances.", this.Text, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                {
+                    InstanceEnabled = false;
+                    checkBox1.Checked = false;
+                }
+                else
+                {
+                    checkBox1.Checked = true;
+                    InstanceEnabled = true;
                 }
             }
         }
@@ -811,15 +1035,69 @@ namespace MonkeModManager
         private void button3_Click(object sender, EventArgs e)
         {
             UpdateStatus("Checking for updates...");
-            Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+            short version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
             if (version > CurrentVersion)
             {
                 this.Invoke((MethodInvoker)(() =>
                 {
-                    MessageBox.Show("A new version is available! Please download it for the latest features.", "Update available!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    Process.Start("https://github.com/NgbatzYT/MonkeModManager/releases/latest");
+                    DialogResult result = MessageBox.Show("A new version is available! Would you like to install it now?", "Update available!", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    if (result != DialogResult.Yes)
+                        return;
+                    string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MonkeUpdater");
+                    if (!Directory.Exists(path))
+                        return;
+                    if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                        return;
+                    UpdateStatus("Checking for updates...");
+                    short version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+                    if (version <= CurrentVersion)
+                        return;
+                    
+                    if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
+                    {
+                        byte[] mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
+                        File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
+                    }
+                    else
+                    {
+                        Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                    }
+
                 }));
             }
+        }
+        private void checkBox4_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBox4.Checked)
+            {
+                DarkMode = true;
+                DarkModeEnable();
+            }
+            else
+            {
+                DarkMode = false;
+                DarkModeDisable();
+            }
+            Properties.Settings.Default.DarkMode = DarkMode;
+            Properties.Settings.Default.Save();
+        }
+        private void panel1_Click(object sender, EventArgs e)
+        {
+            ClickerMoney += ClickPower;
+            label2.Text = $@"Money: ${ClickerMoney}";
+        }
+        private void button4_Click(object sender, EventArgs e)
+        {
+            if (ClickerMoney >= monkeAmount)
+            {
+                ClickerMoney -= monkeAmount;
+                monkeAmount += monkeAmount;
+                label2.Text = $@"Money: ${ClickerMoney}";
+                button4.Text = $@"Buy Monke (+0.1 click power) - ${monkeAmount}";
+                ClickPower += 0.1f;
+                label3.Text = $@"Click Power: {ClickPower}";
+            }
+            else UpdateStatus("Not enough money!");
         }
     }
 }
