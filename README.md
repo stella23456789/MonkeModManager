@@ -10,7 +10,7 @@ This uses the github api to get the latest release of all these mods, so you kno
 Uses [MonkeUpdater](https://github.com/NgbatzYT/MonkeUpdater) to update mmm automatically.
 
 ## To have your Theme/Cosmetic etc added.
-DM me:
+DM me (`ngbatzyt`):
 * The file and images of the thing
 * What mod it uses the name of it and the author name.
 
