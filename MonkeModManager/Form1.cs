@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -20,17 +20,18 @@ namespace MonkeModManager
         private string DefaultSteamInstallDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Gorilla Tag";
         public static string InstallDirectory = @"";
         Dictionary<string, int> groups = new Dictionary<string, int>();
+        Dictionary<string, int> groupss = new Dictionary<string, int>();
         private List<ReleaseInfo> releases;
+        private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
-        private string configFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 2; // actual version is 2.1.0
+        private int CurrentVersion = 5; // actual version is 2.2.0
         public bool InstanceEnabled;
         public bool AutoUpdateEnabled;
         public bool DarkMode;
         public float ClickerMoney = 0f;
         public float ClickPower = 1f;
-        public readonly string VersionNumber = "2.1.0";
+        public readonly string VersionNumber = "2.2.0";
         private int monkeAmount = 5;
         
         public Form1()
@@ -167,7 +168,32 @@ namespace MonkeModManager
                     //Invoke so we can call from any thread
                     buttonToggleMods.Enabled = true;
                 }));
+                
+                AddonInstall();
             }
+        }
+
+        private void AddonInstall()
+        {
+            UpdateStatus("Installing Addons...");
+            ChangeInstallButtonState(false);
+            foreach (ReleaseInfo release in releasesA)
+            {
+                if (release.Install)
+                {
+                    string dir;
+                    UpdateStatus(string.Format("Downloading...{0}", release.Name));
+                    byte[] file = DownloadFile(release.Link);
+                    UpdateStatus(string.Format("Installing...{0}", release.Name));
+                    string fileName = Path.GetFileName(release.Link);
+                    dir = release.InstallLocation == null ? Path.Combine(InstallDirectory, @"BepInEx\plugins", fileName) : Path.Combine(InstallDirectory, release.InstallLocation);
+                    if(!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
+                    File.WriteAllBytes(Path.Combine(dir, fileName), file);
+                }
+            }
+            UpdateStatus("Install complete!");
+            ChangeInstallButtonState(true);
         }
         
         private void UnzipFile(byte[] data, string directory)
@@ -375,6 +401,7 @@ namespace MonkeModManager
             checkBox1.Checked = InstanceEnabled;
             
             releases = [];
+            releasesA = [];
 
             labelVersion.Text = $"Monke Mod Manager v{VersionNumber}";
             
@@ -401,32 +428,6 @@ namespace MonkeModManager
             
             ConfigFix();
             
-            if (AutoUpdateEnabled)
-            {
-                UpdateStatus("Checking for updates...");
-                Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
-                if (version > CurrentVersion)
-                {
-                    if(!Directory.Exists(path))
-                        Directory.CreateDirectory(path);
-                    if (!File.Exists(Path.Combine(path, "MonkeUpdater.exe")))
-                    {
-                        try
-                        {
-                            var mu = DownloadFile("https://github.com/ngbatzyt/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
-                            UpdateStatus("Downloading Monke Updater");
-                            File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), mu);
-                            UpdateStatus("Installed Monke Updater");
-                        }
-                        catch (Exception se)
-                        {
-                            MessageBox.Show(se.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            UpdateStatus("Failed to download Monke Updater");
-                        }
-                    }
-                }
-            }
-            
             AddInstancesToList();
             
             if (!File.Exists(Path.Combine(InstallDirectory, "winhttp.dll")))
@@ -447,14 +448,32 @@ namespace MonkeModManager
             {
                 buttonToggleMods.Enabled = true;
             }
-            new Thread(() =>
+            new Thread(LoadRequiredPlugins).Start();
+            
+            if (AutoUpdateEnabled)
             {
-                LoadRequiredPlugins();
-            }).Start();
+                UpdateStatus("Checking for updates...");
+                Int16 version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
+                if (version > CurrentVersion)
+                {
+                    if(File.Exists(Path.Combine(path, @"MonkeUpdater\MonkeUpdater.exe")))
+                    {
+                        Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                    }
+                    else
+                    {
+                        var ea = DownloadFile("https://github.com/NgbatzYT/MonkeUpdater/releases/latest/download/MonkeUpdater.exe");
+                        File.WriteAllBytes(Path.Combine(path, "MonkeUpdater.exe"), ea);
+                        Process.Start(Path.Combine(path, "MonkeUpdater.exe"));
+                    }
+                    Environment.Exit(0);
+                }
+            }
         }
-        private void DarkModeEnable()
+        
+        #region Theme
+         private void DarkModeEnable()
         {
-            this.FormBorderStyle = FormBorderStyle.Sizable;
             this.BackColor = Color.FromArgb(30, 30, 30);
             foreach (Control control in this.Controls)
             {
@@ -466,6 +485,7 @@ namespace MonkeModManager
         {
             this.FormBorderStyle = FormBorderStyle.Sizable;
             this.BackColor = SystemColors.Control;
+
             foreach (Control control in this.Controls)
             {
                 SetLightModeForControl(control);
@@ -496,10 +516,12 @@ namespace MonkeModManager
                 case DataGridView dgv:
                     dgv.BackgroundColor = Color.FromArgb(30, 30, 30);
                     dgv.ForeColor = Color.White;
+
                     dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(45, 45, 48);
                     dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
                     dgv.DefaultCellStyle.BackColor = Color.FromArgb(30, 30, 30);
                     dgv.DefaultCellStyle.ForeColor = Color.White;
+
                     dgv.EnableHeadersVisualStyles = false;
                     break;
                 case TabControl tc:
@@ -516,9 +538,16 @@ namespace MonkeModManager
                     tb.ForeColor = Color.White;
                     tb.BorderStyle = BorderStyle.FixedSingle;
                     break;
+                case ComboBox cbx:
+                    cbx.FlatStyle = FlatStyle.Flat;
+                    cbx.DropDownStyle = ComboBoxStyle.DropDownList;
+                    cbx.BackColor = Color.FromArgb(30, 30, 30);
+                    cbx.ForeColor = Color.White;
+                    break;
+                case GroupBox gb:
+                    gb.ForeColor = Color.White;
+                    break;
             }
-            if (!c.HasChildren)
-                return;
             foreach (Control child in c.Controls)
             {
                 SetDarkModeForControl(child);
@@ -556,7 +585,6 @@ namespace MonkeModManager
                     break;
                 case TabControl tc:
                     tc.DrawMode = TabDrawMode.Normal;
-                
                     tc.DrawItem -= TabControl_DrawItem;
                     break;
                 case CheckedListBox clb:
@@ -568,30 +596,38 @@ namespace MonkeModManager
                     tb.ForeColor = Color.Black;
                     tb.BorderStyle = BorderStyle.Fixed3D;
                     break;
+                case ComboBox cbx:
+                    cbx.FlatStyle = FlatStyle.Standard;
+                    cbx.BackColor = SystemColors.Window;
+                    cbx.ForeColor = Color.Black;
+                    break;
+                case GroupBox gb:
+                    gb.ForeColor = Color.Black;
+                    break;
             }
-            if (!c.HasChildren)
-                return;
             foreach (Control child in c.Controls)
             {
                 SetLightModeForControl(child);
             }
         }
-        
+
         private void TabControl_DrawItem(object sender, DrawItemEventArgs e)
         {
-            TabControl tabControl = sender as TabControl;
+            var tabControl = sender as TabControl;
             if (tabControl == null) return;
 
-            TabPage tabPage = tabControl.TabPages[e.Index];
-            Rectangle tabRect = tabControl.GetTabRect(e.Index);
-
-            using Brush backBrush = new SolidBrush(Color.FromArgb(45, 45, 48));
-            using Brush foreBrush = new SolidBrush(Color.White);
-            e.Graphics.FillRectangle(backBrush, tabRect);
-            TextRenderer.DrawText(e.Graphics, tabPage.Text, e.Font, tabRect, Color.White);
+            var tabPage = tabControl.TabPages[e.Index];
+            var tabRect = tabControl.GetTabRect(e.Index);
+            
+            using (Brush backBrush = new SolidBrush(Color.FromArgb(45, 45, 48)))
+            using (Brush foreBrush = new SolidBrush(Color.White))
+            {
+                e.Graphics.FillRectangle(backBrush, tabRect);
+                TextRenderer.DrawText(e.Graphics, tabPage.Text, e.Font, tabRect, Color.White);
+            }
         }
 
-
+        #endregion
         
         private void UpdateStatus(string status)
         {
@@ -607,7 +643,7 @@ namespace MonkeModManager
         {
             try
             {
-                if (PermCookie == null) { PermCookie = new CookieContainer(); }
+                PermCookie ??= new CookieContainer();
                 HttpWebRequest RQuest = (HttpWebRequest)HttpWebRequest.Create(URL);
                 RQuest.Method = "GET";
                 RQuest.KeepAlive = true;
@@ -624,24 +660,23 @@ namespace MonkeModManager
             }
             catch (Exception ex)
             {
-                if (ex.Message.Contains("403"))
-                {
-                    MessageBox.Show("Failed to fetch info, GitHub has most likely rate limited you, please check back in 15 - 30 minutes", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-                else
-                {
-                    MessageBox.Show("Failed to fetch info, please check your internet connection", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                MessageBox.Show(
+                    ex.Message.Contains("403")
+                        ? "Failed to fetch info, GitHub has most likely rate limited you, please check back in 15 - 30 minutes"
+                        : "Failed to fetch info, please check your internet connection", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MessageBox.Show("You will still be able to use MMM but you won't be able to install mods.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateStatus("Failed to fetch info");
                 return null;
             }
         }
+
+        #region LoadReleases
         
         private void LoadReleases()
         {
-            var decodedMods = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/The-Graze/MonkeModInfo/master/modinfo.json"));
             var decodedGroups = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/The-Graze/MonkeModInfo/master/groupinfo.json"));
+            var decodedMods = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/The-Graze/MonkeModInfo/master/modinfo.json"));
+
             
             var allMods = decodedMods.AsArray;
             var allGroups = decodedGroups.AsArray;
@@ -649,7 +684,7 @@ namespace MonkeModManager
             for (int i = 0; i < allMods.Count; i++)
             {
                 JSONNode current = allMods[i];
-                ReleaseInfo release = new ReleaseInfo(current["name"], current["author"], current["version"], current["group"], current["download_url"], current["install_location"], current["git_path"], current["dependencies"].AsArray);
+                ReleaseInfo release = new ReleaseInfo(current["name"], current["author"], current["version"], current["group"], current["download_url"], current["install_location"], current["git_path"], current["mod"] ,current["dependencies"].AsArray);
                 //UpdateReleaseInfo(ref release);
                 releases.Add(release);
             }
@@ -675,7 +710,45 @@ namespace MonkeModManager
             }
         }
         
+        private void LoadReleasesAddon()
+        {
+            var adecodedMods = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModInfo/master/addoninfo.json"));
+            var adecodedGroups = JSON.Parse(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModInfo/master/addonmodinfo.json"));
+
+            
+            var aallMods = adecodedMods.AsArray;
+            var aallGroups = adecodedGroups.AsArray;
+
+            for (int i = 0; i < aallMods.Count; i++)
+            {
+                JSONNode current = aallMods[i];
+                ReleaseInfo release = new ReleaseInfo(current["name"], current["author"], current["version"], current["group"], current["download_url"], current["install_location"], current["git_path"], current["mod"] ,current["dependencies"].AsArray);
+                //UpdateReleaseInfo(ref release);
+                releasesA.Add(release);
+            }
+
+
+            IOrderedEnumerable<KeyValuePair<string, JSONNode>> keyValuePairs = aallGroups.Linq.OrderBy(x => x.Value["rank"]);
+            for (int i = 0; i < aallGroups.Count; i++)
+            {
+                JSONNode current = aallGroups[i];
+                if (releasesA.Any(x => x.Group == current["name"]))
+                {
+                    groupss.Add(current["name"], groupss.Count());
+                }
+            }
+            groupss.Add("Uncategorized", groupss.Count);
+
+            foreach (ReleaseInfo release in releasesA)
+            {
+                foreach (string dep in release.Dependencies)
+                {
+                    releasesA.Where(x => x.Name == dep).FirstOrDefault()?.Dependents.Add(release.Name);
+                }
+            }
+        }
         
+        #endregion
         public static void ConfigFix()
         {
             if (!File.Exists(Path.Combine(InstallDirectory, @"BepInEx\config\BepInEx.cfg")))
@@ -769,6 +842,8 @@ namespace MonkeModManager
                 checkedListBox1.Items.Add(folderName);
             }
         }
+
+        #region LoadRequired
         
         private void LoadRequiredPlugins()
         {
@@ -822,7 +897,57 @@ namespace MonkeModManager
             }));
            
             UpdateStatus("Release info updated!");
+            
+            new Thread(LoadRequiredPluginAddons).Start();
+        }
+        
+        private void LoadRequiredPluginAddons()
+        {
+            UpdateStatus("Getting latest addon info...");
+            LoadReleasesAddon();
+            this.Invoke((MethodInvoker)(() =>
+            {
+                var includedGroups = new Dictionary<string, int>();
 
+                for (int i = 0; i < groupss.Count(); i++)
+                {
+                    var key = groupss.First(x => x.Value == i).Key;
+                    var value = listViewed.Groups.Add(new ListViewGroup(key, HorizontalAlignment.Left));
+                    groupss[key] = value;
+                }
+
+                foreach (ReleaseInfo release in releasesA)
+                {
+                    ListViewItem item = new ListViewItem();
+                    item.Text = release.Name;
+                    if (!String.IsNullOrEmpty(release.Version)) item.Text = $"{release.Name} - {release.Version} - {release.Mod}";
+                    if (!String.IsNullOrEmpty(release.Tag)) { item.Text = string.Format("{0} - ({1})",release.Name, release.Tag); };
+                    item.SubItems.Add(release.Author);
+                    item.SubItems.Add(release.Mod);
+                    item.Tag = release;
+                    if (release.Install)
+                    {
+                        listViewed.Items.Add(item);
+                    }
+
+                    if (release.Group == null || !groupss.ContainsKey(release.Group))
+                    {
+                        item.Group = listViewed.Groups[groups["Uncategorized"]];
+                    }
+                    else if (groupss.ContainsKey(release.Group))
+                    {
+                        int index = groupss[release.Group];
+                        item.Group = listViewed.Groups[index];
+                    }
+                }
+
+                tabControlMain.Enabled = true;
+                buttonInstall.Enabled = true;
+
+            }));
+           
+            UpdateStatus("Release info updated!");
+            
         }
                 
         private void CheckDefaultMod(ReleaseInfo release, ListViewItem item)
@@ -837,6 +962,11 @@ namespace MonkeModManager
                 release.Install = false;
             }
         }
+        
+        
+        #endregion
+        #region location
+        
         private void NotFoundHandler()
         {
             bool found = false;
@@ -876,7 +1006,9 @@ namespace MonkeModManager
             NotFoundHandler();
             this.TopMost = true;
         }
-
+        #endregion
+        
+        #region Random
         private void EditmmmConfig(string e)
         {
             Properties.Settings.Default.InstallDirectory = e;
@@ -1005,7 +1137,7 @@ namespace MonkeModManager
         {
             UpdateStatus("Checking for updates...");
             short version = Convert.ToInt16(DownloadSite("https://raw.githubusercontent.com/NgbatzYT/MonkeModManager/master/update"));
-            if (version > CurrentVersion)
+            if (version >= CurrentVersion)
             {
                 this.Invoke((MethodInvoker)(() =>
                 {
@@ -1023,6 +1155,11 @@ namespace MonkeModManager
                         Application.Exit();
                     }
                 }));
+            }
+            else
+            {
+                
+                UpdateStatus("You are already on the latest version.");
             }
         }
         private void checkBox4_CheckedChanged(object sender, EventArgs e)
@@ -1052,7 +1189,7 @@ namespace MonkeModManager
                 ClickerMoney -= monkeAmount;
                 monkeAmount += monkeAmount;
                 label2.Text = $@"Money: ${ClickerMoney}";
-                button4.Text = $@"Buy Monke (+0.1 click power) - ${monkeAmount}";
+                button4.Text = $@"Buy Monke (+0.1 Click Power) - ${monkeAmount}";
                 ClickPower += 0.1f;
                 label3.Text = $@"Click Power: {ClickPower}";
             }
@@ -1064,5 +1201,8 @@ namespace MonkeModManager
             AutoUpdateEnabled = Properties.Settings.Default.AutoUpdate;
             Properties.Settings.Default.Save();
         }
+        
+        
+        #endregion
     }
 }

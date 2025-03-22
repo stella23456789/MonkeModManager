@@ -16,11 +16,12 @@ namespace MonkeModManager.Internals
         public string Tag;
         public string Group;
         public string InstallLocation;
+        public string Mod;
         public int ReleaseId;
         public bool Install = true;
         public List<string> Dependencies = new List<string>();
         public List<string> Dependents = new List<string>();
-        public ReleaseInfo(string _name, string _author, string _version, string _group, string _link, string _installLocation, string _gitPath, JSONArray dependencies)
+        public ReleaseInfo(string _name, string _author, string _version, string _group, string _link, string _installLocation, string _gitPath, string _mod, JSONArray dependencies)
         {
             Name = _name;
             Author = _author;
@@ -30,6 +31,7 @@ namespace MonkeModManager.Internals
             GitPath = _gitPath;
             InstallLocation = _installLocation;
             Group = _group;
+            Mod = _mod;
 
             if (dependencies == null) return;
             for (int i = 0; i < dependencies.Count; i++)

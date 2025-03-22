@@ -1,4 +1,6 @@
-﻿namespace MonkeModManager
+﻿using System.Windows.Forms;
+
+namespace MonkeModManager
 {
     partial class Form1
     {
@@ -42,6 +44,11 @@
             this.columnHeaderAuthor = new System.Windows.Forms.ColumnHeader();
             this.contextMenuStripMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PluginAddons = new System.Windows.Forms.TabPage();
+            this.listViewed = new System.Windows.Forms.ListView();
+            this.columnHeader1 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
+            this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.Utilities = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
@@ -66,17 +73,16 @@
             this.Experimental = new System.Windows.Forms.TabPage();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.BananaClicker = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
             this.buttonModInfo = new System.Windows.Forms.Button();
             this.buttonToggleMods = new System.Windows.Forms.Button();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.jToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControlMain.SuspendLayout();
             this.Plugins.SuspendLayout();
             this.contextMenuStripMain.SuspendLayout();
+            this.PluginAddons.SuspendLayout();
             this.Utilities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -84,7 +90,6 @@
             this.Settins.SuspendLayout();
             this.Experimental.SuspendLayout();
             this.BananaClicker.SuspendLayout();
-            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxDirectory
@@ -93,7 +98,7 @@
             this.textBoxDirectory.Enabled = false;
             this.textBoxDirectory.Location = new System.Drawing.Point(10, 25);
             this.textBoxDirectory.Name = "textBoxDirectory";
-            this.textBoxDirectory.Size = new System.Drawing.Size(508, 22);
+            this.textBoxDirectory.Size = new System.Drawing.Size(508, 20);
             this.textBoxDirectory.TabIndex = 0;
             // 
             // buttonFolderBrowser
@@ -112,7 +117,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(9, 9);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 13);
+            this.label1.Size = new System.Drawing.Size(118, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Gorilla Tag Folder Path:";
             // 
@@ -134,7 +139,7 @@
             this.labelStatus.AutoSize = true;
             this.labelStatus.Location = new System.Drawing.Point(7, 346);
             this.labelStatus.Name = "labelStatus";
-            this.labelStatus.Size = new System.Drawing.Size(66, 13);
+            this.labelStatus.Size = new System.Drawing.Size(61, 13);
             this.labelStatus.TabIndex = 5;
             this.labelStatus.Text = "Status: Null";
             // 
@@ -142,6 +147,7 @@
             // 
             this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Controls.Add(this.Plugins);
+            this.tabControlMain.Controls.Add(this.PluginAddons);
             this.tabControlMain.Controls.Add(this.Utilities);
             this.tabControlMain.Controls.Add(this.Instances);
             this.tabControlMain.Controls.Add(this.Settins);
@@ -193,7 +199,6 @@
             // columnHeaderAuthor
             // 
             this.columnHeaderAuthor.Text = "Author";
-            this.columnHeaderAuthor.Width = 162;
             // 
             // contextMenuStripMain
             // 
@@ -210,6 +215,50 @@
             this.viewInfoToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.viewInfoToolStripMenuItem.Text = "View Info";
             this.viewInfoToolStripMenuItem.Click += new System.EventHandler(this.viewInfoToolStripMenuItem_Click);
+            // 
+            // PluginAddons
+            // 
+            this.PluginAddons.Controls.Add(this.listViewed);
+            this.PluginAddons.Location = new System.Drawing.Point(4, 22);
+            this.PluginAddons.Name = "PluginAddons";
+            this.PluginAddons.Padding = new System.Windows.Forms.Padding(3);
+            this.PluginAddons.Size = new System.Drawing.Size(536, 256);
+            this.PluginAddons.TabIndex = 6;
+            this.PluginAddons.Text = "Plugin Addons";
+            this.PluginAddons.UseVisualStyleBackColor = true;
+            // 
+            // listViewed
+            // 
+            this.listViewed.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
+            this.listViewed.CheckBoxes = true;
+            this.listViewed.Columns.AddRange(new System.Windows.Forms.ColumnHeader[]
+            {
+                this.columnHeader1, this.columnHeader2, this.columnHeader3
+            });
+            this.listViewed.ContextMenuStrip = this.contextMenuStripMain;
+            this.listViewed.FullRowSelect = true;
+            this.listViewed.HideSelection = false;
+            this.listViewed.Location = new System.Drawing.Point(6, 6);
+            this.listViewed.Name = "listViewed";
+            this.listViewed.Size = new System.Drawing.Size(524, 244);
+            this.listViewed.TabIndex = 1;
+            this.listViewed.UseCompatibleStateImageBehavior = false;
+            this.listViewed.View = System.Windows.Forms.View.Details;
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Name";
+            this.columnHeader1.Width = 270;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Author";
+            this.columnHeader2.Width = 99;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Mod";
+            this.columnHeader3.Width = 121;
             // 
             // Utilities
             // 
@@ -243,7 +292,7 @@
             this.labelVersion.AutoSize = true;
             this.labelVersion.Location = new System.Drawing.Point(188, 209);
             this.labelVersion.Name = "labelVersion";
-            this.labelVersion.Size = new System.Drawing.Size(119, 13);
+            this.labelVersion.Size = new System.Drawing.Size(109, 13);
             this.labelVersion.TabIndex = 11;
             this.labelVersion.Text = "Monke Mod Manager";
             this.labelVersion.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -326,7 +375,7 @@
             this.labelOpen.AutoSize = true;
             this.labelOpen.Location = new System.Drawing.Point(23, 15);
             this.labelOpen.Name = "labelOpen";
-            this.labelOpen.Size = new System.Drawing.Size(99, 13);
+            this.labelOpen.Size = new System.Drawing.Size(88, 13);
             this.labelOpen.TabIndex = 6;
             this.labelOpen.Text = "Important Folders";
             // 
@@ -359,7 +408,7 @@
             this.checkedListBox1.FormattingEnabled = true;
             this.checkedListBox1.Location = new System.Drawing.Point(3, 4);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(527, 225);
+            this.checkedListBox1.Size = new System.Drawing.Size(527, 214);
             this.checkedListBox1.TabIndex = 4;
             this.checkedListBox1.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.checkedListBox1_ItemCheck);
             // 
@@ -415,6 +464,7 @@
             this.checkBox3.TabIndex = 3;
             this.checkBox3.Text = "Auto-update";
             this.checkBox3.UseVisualStyleBackColor = true;
+            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // button3
             // 
@@ -460,10 +510,10 @@
             // 
             // BananaClicker
             // 
+            this.BananaClicker.Controls.Add(this.panel1);
             this.BananaClicker.Controls.Add(this.label3);
             this.BananaClicker.Controls.Add(this.label2);
             this.BananaClicker.Controls.Add(this.button4);
-            this.BananaClicker.Controls.Add(this.panel1);
             this.BananaClicker.Location = new System.Drawing.Point(4, 22);
             this.BananaClicker.Name = "BananaClicker";
             this.BananaClicker.Padding = new System.Windows.Forms.Padding(3);
@@ -471,6 +521,16 @@
             this.BananaClicker.TabIndex = 5;
             this.BananaClicker.Text = "BananaClicker";
             this.BananaClicker.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
+            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel1.Location = new System.Drawing.Point(315, 79);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(215, 100);
+            this.panel1.TabIndex = 0;
+            this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
             // label3
             // 
@@ -494,19 +554,9 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(218, 23);
             this.button4.TabIndex = 1;
-            this.button4.Text = "Buy Monke (+0.1 Auto-clicks) - $5";
+            this.button4.Text = "Buy Monke (+0.1 Click Power) - $5";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel1.Location = new System.Drawing.Point(315, 79);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(215, 100);
-            this.panel1.TabIndex = 0;
-            this.panel1.Click += new System.EventHandler(this.panel1_Click);
             // 
             // buttonModInfo
             // 
@@ -532,21 +582,6 @@
             this.buttonToggleMods.UseVisualStyleBackColor = true;
             this.buttonToggleMods.Click += new System.EventHandler(this.buttonToggleMods_Click);
             // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[]
-            {
-                this.jToolStripMenuItem
-            });
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(140, 26);
-            // 
-            // jToolStripMenuItem
-            // 
-            this.jToolStripMenuItem.Name = "jToolStripMenuItem";
-            this.jToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
-            this.jToolStripMenuItem.Text = "List Instance";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -554,13 +589,12 @@
             this.ClientSize = new System.Drawing.Size(566, 376);
             this.Controls.Add(this.buttonToggleMods);
             this.Controls.Add(this.buttonModInfo);
-            this.Controls.Add(this.tabControlMain);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.buttonInstall);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.buttonFolderBrowser);
             this.Controls.Add(this.textBoxDirectory);
-            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Controls.Add(this.tabControlMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -569,6 +603,7 @@
             this.tabControlMain.ResumeLayout(false);
             this.Plugins.ResumeLayout(false);
             this.contextMenuStripMain.ResumeLayout(false);
+            this.PluginAddons.ResumeLayout(false);
             this.Utilities.ResumeLayout(false);
             this.Utilities.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -578,10 +613,14 @@
             this.Settins.ResumeLayout(false);
             this.Experimental.ResumeLayout(false);
             this.BananaClicker.ResumeLayout(false);
-            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.TabPage PluginAddons;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
+        private System.Windows.Forms.ListView listViewed;
+        private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button button4;
@@ -592,8 +631,6 @@
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem jToolStripMenuItem;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button RefrshIns;
         private System.Windows.Forms.CheckBox checkBox1;

@@ -15,7 +15,8 @@
         <ApplicationIcon>mmm.ico</ApplicationIcon>
         <LangVersion>Latest</LangVersion>
         <AssemblyOriginatorKeyFile>MonkeModManager.snk</AssemblyOriginatorKeyFile>
-        <PublicSign>false</PublicSign>
+        <PublicSign>true</PublicSign>
+        <SignAssembly>true</SignAssembly>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
