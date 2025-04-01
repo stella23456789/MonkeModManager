@@ -65,6 +65,12 @@
         <Compile Include="Form1.Designer.cs">
             <DependentUpon>Form1.cs</DependentUpon>
         </Compile>
+        <Compile Include="Form1Dark.cs">
+          <SubType>Form</SubType>
+        </Compile>
+        <Compile Include="Form1Dark.Designer.cs">
+          <DependentUpon>Form1Dark.cs</DependentUpon>
+        </Compile>
         <Compile Include="Internals\ReleaseInfo.cs" />
         <Compile Include="Internals\SimpleJson.cs" />
         <Compile Include="Internals\Unzip.cs" />
@@ -75,6 +81,9 @@
         </EmbeddedResource>
         <EmbeddedResource Include="Form1.resx">
           <DependentUpon>Form1.cs</DependentUpon>
+        </EmbeddedResource>
+        <EmbeddedResource Include="Form1Dark.resx">
+          <DependentUpon>Form1Dark.cs</DependentUpon>
         </EmbeddedResource>
         <EmbeddedResource Include="Properties\Resources.resx">
             <Generator>ResXFileCodeGenerator</Generator>

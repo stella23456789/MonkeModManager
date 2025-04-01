@@ -13,7 +13,7 @@ using MonkeModManager.Internals.SimpleJSON;
 
 namespace MonkeModManager
 {
-    public partial class Form1 : Form
+    public partial class Form1Dark : Form
     {
         
         private string DefaultOculusInstallDirectory = @"C:\Program Files\Oculus\Software\Software\another-axiom-gorilla-tag";
@@ -25,7 +25,7 @@ namespace MonkeModManager
         private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 7; // actual version is 2.3.0
+        private int CurrentVersion = 7  ; // actual version is 2.3.0
         public bool InstanceEnabled;
         public bool AutoUpdateEnabled;
         public bool DarkMode;
@@ -34,7 +34,7 @@ namespace MonkeModManager
         public readonly string VersionNumber = "2.3.0";
         private int monkeAmount = 5;
         
-        public Form1()
+        public Form1Dark()
         {
             InitializeComponent();
         }
@@ -1033,7 +1033,7 @@ namespace MonkeModManager
             DarkMode = checkBox4.Checked;
             Properties.Settings.Default.DarkMode = DarkMode;
             Properties.Settings.Default.Save();
-            if (checkBox4.Checked)
+            if (!checkBox4.Checked)
             {
                 Application.Restart();
             }
