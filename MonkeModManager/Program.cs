@@ -16,16 +16,7 @@ namespace MonkeModManager
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            if (Properties.Settings.Default.DarkMode)
-            {
-                Application.Run(new Form1Dark());
-            }
-            else
-            {
-                Application.Run(new Form1());
-            }
-            
-            
+            Application.Run(new Form1());
         }
     }
 }

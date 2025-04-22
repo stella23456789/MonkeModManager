@@ -25,20 +25,16 @@ namespace MonkeModManager
         private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
         private string DefaultDoorstopPath = @"target_assembly=BepInEx\core\BepInEx.Preloader.dll";
-        private int CurrentVersion = 7; // actual version is 2.3.0
+        private int CurrentVersion = 8; // actual version is 2.4.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
         public bool InstanceEnabled;
         public bool AutoUpdateEnabled;
-        public bool DarkMode;
         public float ClickerMoney = 0f;
         public float ClickPower = 1f;
-        public readonly string VersionNumber = "2.3.0";
+        public readonly string VersionNumber = "2.4.0.0";
         private int monkeAmount = 5;
         
-        public Form1()
-        {
-            InitializeComponent();
-        }
-
+        public Form1() => InitializeComponent();
+        
         private void buttonFolderBrowser_Click(object sender, EventArgs e)
         {
             using (var fileDialog = new OpenFileDialog())
@@ -56,9 +52,7 @@ namespace MonkeModManager
                         EditmmmConfig(InstallDirectory);
                     }
                     else
-                    {
                         MessageBox.Show("That's not Gorilla Tag.exe! please try again!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
                 }
             }
         }
@@ -114,14 +108,6 @@ namespace MonkeModManager
                             UpdateStatus(string.Format("Installed {0}!", release.Name));
                         }
                     }
-                    UpdateStatus("Install complete!");
-                    ChangeInstallButtonState(true);
-
-                    this.Invoke((MethodInvoker)(() =>
-                    {
-                        //Invoke so we can call from any thread
-                        buttonToggleMods.Enabled = true;
-                    }));
                 }
                 else
                 {
@@ -163,17 +149,15 @@ namespace MonkeModManager
                             UpdateStatus(string.Format("Installed {0}!", release.Name));
                         }
                     }
-                    UpdateStatus("Install complete!");
-                    ChangeInstallButtonState(true);
-
-                    this.Invoke((MethodInvoker)(() =>
-                    {
-                        //Invoke so we can call from any thread
-                        buttonToggleMods.Enabled = true;
-                    }));
-
-                    AddonInstall();
                 }
+                UpdateStatus("Install complete!");
+                ChangeInstallButtonState(true);
+                this.Invoke((MethodInvoker)(() =>
+                {
+                    //Invoke so we can call from any thread
+                    buttonToggleMods.Enabled = true;
+                }));
+                AddonInstall();
             }
             catch (Exception e)
             {
@@ -299,7 +283,7 @@ namespace MonkeModManager
                         if (e.Item.Checked)
                         {
                             item.Checked = true;
-                            item.ForeColor = System.Drawing.Color.DimGray;
+                            item.ForeColor = Color.DimGray;
                         }
                         else
                         {
@@ -307,7 +291,7 @@ namespace MonkeModManager
                             if (releases.Count(x => plugin.Dependents.Contains(x.Name) && x.Install) <= 1)
                             {
                                 item.Checked = false;
-                                item.ForeColor = System.Drawing.Color.Black;
+                                item.ForeColor = Color.Black;
                             }
                         }
                     }
@@ -330,19 +314,10 @@ namespace MonkeModManager
         {
             buttonModInfo.Enabled = listViewMods.SelectedItems.Count > 0;
         }
-        void listViewMods_DoubleClick(object sender, EventArgs e)
-        {
-            OpenLinkFromRelease();
-        }
-        void viewInfoToolStripMenuItem_Click(object sender, EventArgs e) {OpenLinkFromRelease();}
-        void buttonOpenWiki_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://loafiat.github.io/GorillaTag-Modding-Guide/#/pc-guide");
-        }
-        void buttonDiscordLink_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://discord.gg/monkemod");
-        }
+        void listViewMods_DoubleClick(object sender, EventArgs e) => OpenLinkFromRelease();
+        void viewInfoToolStripMenuItem_Click(object sender, EventArgs e) => OpenLinkFromRelease();
+        void buttonDiscordLink_Click(object sender, EventArgs e) => Process.Start("https://discord.gg/monkemod");
+        
         private void buttonOpenGameFolder_Click(object sender, EventArgs e)
         {
             if (Directory.Exists(InstallDirectory))
@@ -396,10 +371,7 @@ namespace MonkeModManager
                 UpdateStatus("All mods uninstalled successfully!");
             }
         }
-        void buttonModInfo_Click(object sender, EventArgs e)
-        {
-            OpenLinkFromRelease();
-        }
+        void buttonModInfo_Click(object sender, EventArgs e) => OpenLinkFromRelease();
         
         private void OpenLinkFromRelease()
         {
@@ -448,15 +420,7 @@ namespace MonkeModManager
             checkBox1.Checked = InstanceEnabled;
             AutoUpdateEnabled = Properties.Settings.Default.AutoUpdate;
             checkBox3.Checked = AutoUpdateEnabled;
-            DarkMode = Properties.Settings.Default.DarkMode;
-            checkBox4.Checked = DarkMode;
             InstallDirectory = Properties.Settings.Default.InstallDirectory;
-
-            if (DarkMode)
-            {
-                //DarkModeEnable();
-                checkBox4.Checked = Properties.Settings.Default.DarkMode;
-            }
             checkBox1.Checked = InstanceEnabled;
             
             releases = [];
@@ -678,58 +642,9 @@ namespace MonkeModManager
             string e = c.Replace(@"target_assembly=BepInEx\core\BepInEx.Preloader.dll", $@"target_assembly={instancePath}");
             File.WriteAllText(Path.Combine(InstallDirectory, @"doorstop_config.ini"), e);
         }
-        private void button1_Click(object sender, EventArgs e)
-        {
-            ConfigEditor configEditor = new ConfigEditor();
-            configEditor.Show();
-        }
-
-        private void MmmConfig()
-        {
-            /*
-            string MMMPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            
-            string confPath = Path.Combine(MMMPath, "MMM.config.conf");
-            
-            if (!File.Exists(confPath))
-            {
-                File.WriteAllText(confPath, @"InstallDirectory=" + InstallDirectory);
-            }
-            
-            string[] content = File.ReadAllLines(confPath);
-            
-            foreach (string line in content)
-            {
-                if (!line.StartsWith("InstallDirectory="))
-                    continue;
-                string value = line.Substring("InstallDirectory=".Length);
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    InstallDirectory = @value;
-                }
-                break;
-            }*/
-            
-            // Migration to new config system
-            string confPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MMM.config.conf");
-            string[] content = File.ReadAllLines(confPath);
-
-            foreach (string line in content)
-            {
-                if (!line.StartsWith("InstallDirectory="))
-                    continue;
-                string a = line.Substring("InstallDirectory=".Length);
-                if (string.IsNullOrWhiteSpace(a))
-                    continue;
-                Properties.Settings.Default.InstallDirectory = a;
-                InstallDirectory = Properties.Settings.Default.InstallDirectory;
-            }
-            Properties.Settings.Default.Save();
-        }
-
+        
         private void AddInstancesToList()
         {
-            
             string instancesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "mmmInstances");
             if (!Directory.Exists(instancesPath))  
                 Directory.CreateDirectory(instancesPath);
@@ -889,14 +804,11 @@ namespace MonkeModManager
                             EditmmmConfig(InstallDirectory);
                         }
                         else
-                        {
                             MessageBox.Show("That's not Gorilla Tag.exe! please try again!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
                     }
                     else
-                    {
                         Process.GetCurrentProcess().Kill();
-                    }
+                    
                 }
             }
         }
@@ -921,19 +833,14 @@ namespace MonkeModManager
             string result = ShowInputDialog("Enter the name for your new Instance.", "Instance Creator");
 
             if (string.IsNullOrEmpty(result))
-            {
                 MessageBox.Show("Instance name can't be null.", "Instance Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             else if (Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}")))
-            {
                 MessageBox.Show("Instance name is already in use. Try a different name.", "Instance Creation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
             else if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}")))
             {
                 if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"mmmInstances")))
-                {
                     Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), @"mmmInstances"));
-                }
+                
                 
                 Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), $@"mmmInstances\{result}"));
                 byte[] file = DownloadFile("https://github.com/BepInEx/BepInEx/releases/download/v5.4.23.2/BepInEx_win_x64_5.4.23.2.zip");
@@ -948,10 +855,8 @@ namespace MonkeModManager
             }
         }
         
-        private void RefrshIns_Click(object sender, EventArgs e)
-        {
-            AddInstancesToList();
-        }
+        private void RefrshIns_Click(object sender, EventArgs e) => AddInstancesToList();
+        
         
         static string ShowInputDialog(string prompt, string title)
         {
@@ -1028,16 +933,6 @@ namespace MonkeModManager
                 UpdateStatus("You already have the latest MMM!");
             }
         }
-        private void checkBox4_CheckedChanged(object sender, EventArgs e)
-        {
-            DarkMode = checkBox4.Checked;
-            Properties.Settings.Default.DarkMode = DarkMode;
-            Properties.Settings.Default.Save();
-            if (checkBox4.Checked)
-            {
-                Application.Restart();
-            }
-        }
         private void panel1_Click(object sender, EventArgs e)
         {
             ClickerMoney += ClickPower;
@@ -1065,5 +960,8 @@ namespace MonkeModManager
         
         
         #endregion
+
+        private void button1_Click(object sender, EventArgs e) => Process.Start("https://github.com/the-graze/MonkeModManager/releases/latest");
+        private void pictureBox1_Click(object sender, EventArgs e) => Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
     }
 }

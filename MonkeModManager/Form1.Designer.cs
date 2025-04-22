@@ -50,11 +50,10 @@ namespace MonkeModManager
             this.columnHeader2 = new System.Windows.Forms.ColumnHeader();
             this.columnHeader3 = new System.Windows.Forms.ColumnHeader();
             this.Utilities = new System.Windows.Forms.TabPage();
-            this.button5 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.button5 = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonOpenWiki = new System.Windows.Forms.Button();
             this.buttonDiscordLink = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.buttonBepInEx = new System.Windows.Forms.Button();
@@ -68,7 +67,6 @@ namespace MonkeModManager
             this.RefrshIns = new System.Windows.Forms.Button();
             this.instanceButton = new System.Windows.Forms.Button();
             this.Settins = new System.Windows.Forms.TabPage();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.BananaClicker = new System.Windows.Forms.TabPage();
@@ -260,11 +258,10 @@ namespace MonkeModManager
             // 
             // Utilities
             // 
-            this.Utilities.Controls.Add(this.button5);
             this.Utilities.Controls.Add(this.button1);
+            this.Utilities.Controls.Add(this.button5);
             this.Utilities.Controls.Add(this.labelVersion);
             this.Utilities.Controls.Add(this.pictureBox1);
-            this.Utilities.Controls.Add(this.buttonOpenWiki);
             this.Utilities.Controls.Add(this.buttonDiscordLink);
             this.Utilities.Controls.Add(this.groupBox1);
             this.Utilities.Controls.Add(this.buttonUninstallAll);
@@ -275,6 +272,16 @@ namespace MonkeModManager
             this.Utilities.Text = "Utilities";
             this.Utilities.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(14, 72);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(132, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "Graze\'s MMM download";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(14, 221);
@@ -284,16 +291,6 @@ namespace MonkeModManager
             this.button5.Text = "Check for updates";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(14, 83);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 23);
-            this.button1.TabIndex = 12;
-            this.button1.Text = "Config Editor\r\n";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // labelVersion
             // 
@@ -316,16 +313,7 @@ namespace MonkeModManager
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
-            // 
-            // buttonOpenWiki
-            // 
-            this.buttonOpenWiki.Location = new System.Drawing.Point(379, 183);
-            this.buttonOpenWiki.Name = "buttonOpenWiki";
-            this.buttonOpenWiki.Size = new System.Drawing.Size(134, 23);
-            this.buttonOpenWiki.TabIndex = 9;
-            this.buttonOpenWiki.Text = "Check out the guides!";
-            this.buttonOpenWiki.UseVisualStyleBackColor = true;
-            this.buttonOpenWiki.Click += new System.EventHandler(this.buttonOpenWiki_Click);
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // buttonDiscordLink
             // 
@@ -453,7 +441,6 @@ namespace MonkeModManager
             // 
             // Settins
             // 
-            this.Settins.Controls.Add(this.checkBox4);
             this.Settins.Controls.Add(this.checkBox3);
             this.Settins.Controls.Add(this.checkBox1);
             this.Settins.Location = new System.Drawing.Point(4, 22);
@@ -463,16 +450,6 @@ namespace MonkeModManager
             this.Settins.TabIndex = 3;
             this.Settins.Text = "Settings";
             this.Settins.UseVisualStyleBackColor = true;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.Location = new System.Drawing.Point(6, 56);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(115, 22);
-            this.checkBox4.TabIndex = 4;
-            this.checkBox4.Text = "Dark Mode";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            this.checkBox4.CheckedChanged += new System.EventHandler(this.checkBox4_CheckedChanged);
             // 
             // checkBox3
             // 
@@ -603,6 +580,7 @@ namespace MonkeModManager
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TabPage PluginAddons;
         private System.Windows.Forms.ColumnHeader columnHeader1;
@@ -614,7 +592,6 @@ namespace MonkeModManager
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.TabPage BananaClicker;
-        private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.Button button2;
@@ -623,7 +600,6 @@ namespace MonkeModManager
         private System.Windows.Forms.TabPage Instances;
         private System.Windows.Forms.TabPage Settins;
         private System.Windows.Forms.Button instanceButton;
-        private System.Windows.Forms.Button button1;
 
         #endregion
 
@@ -647,7 +623,6 @@ namespace MonkeModManager
         private System.Windows.Forms.Button buttonBepInEx;
         private System.Windows.Forms.Button buttonOpenConfig;
         private System.Windows.Forms.Button buttonOpenGameFolder;
-        private System.Windows.Forms.Button buttonOpenWiki;
         private System.Windows.Forms.Button buttonDiscordLink;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelVersion;
