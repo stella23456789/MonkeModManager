@@ -25,10 +25,10 @@ namespace MonkeModManager
         private List<ReleaseInfo> releases;
         private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
-        private int CurrentVersion = 9; // actual version is 2.5.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
+        private int CurrentVersion = 10; // actual version is 2.5.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
         public float ClickerMoney;
         public float ClickPower = 1f;
-        public readonly string VersionNumber = "2.5.0.0";
+        public readonly string VersionNumber = "2.5.1.0";
         private int monkeAmount = 5;
 
         public Form1() => InitializeComponent();
