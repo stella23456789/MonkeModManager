@@ -40,14 +40,13 @@ namespace MonkeModManager
             this.contextMenuStripMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonModInfo = new System.Windows.Forms.Button();
-            this.buttonToggleMods = new System.Windows.Forms.Button();
             this.BananaClicker = new System.Windows.Forms.TabPage();
+            this.BANNa = new System.Windows.Forms.Panel();
             this.button2 = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
-            this.BANNa = new System.Windows.Forms.Panel();
             this.Utilities = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -70,6 +69,11 @@ namespace MonkeModManager
             this.columnHeaderName = new System.Windows.Forms.ColumnHeader();
             this.columnHeaderAuthor = new System.Windows.Forms.ColumnHeader();
             this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.GameOptions = new System.Windows.Forms.TabPage();
+            this.label4 = new System.Windows.Forms.Label();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.button6 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.contextMenuStripMain.SuspendLayout();
             this.BananaClicker.SuspendLayout();
             this.Utilities.SuspendLayout();
@@ -78,6 +82,7 @@ namespace MonkeModManager
             this.PluginAddons.SuspendLayout();
             this.Plugins.SuspendLayout();
             this.tabControlMain.SuspendLayout();
+            this.GameOptions.SuspendLayout();
             this.SuspendLayout();
             // 
             // textBoxDirectory
@@ -159,33 +164,31 @@ namespace MonkeModManager
             this.buttonModInfo.UseVisualStyleBackColor = true;
             this.buttonModInfo.Click += new System.EventHandler(this.buttonModInfo_Click);
             // 
-            // buttonToggleMods
-            // 
-            this.buttonToggleMods.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonToggleMods.Enabled = false;
-            this.buttonToggleMods.Location = new System.Drawing.Point(204, 341);
-            this.buttonToggleMods.Name = "buttonToggleMods";
-            this.buttonToggleMods.Size = new System.Drawing.Size(112, 23);
-            this.buttonToggleMods.TabIndex = 10;
-            this.buttonToggleMods.Text = "Disable Mods";
-            this.buttonToggleMods.UseVisualStyleBackColor = true;
-            this.buttonToggleMods.Click += new System.EventHandler(this.buttonToggleMods_Click);
-            // 
             // BananaClicker
             // 
+            this.BananaClicker.Controls.Add(this.BANNa);
             this.BananaClicker.Controls.Add(this.button2);
             this.BananaClicker.Controls.Add(this.panel1);
             this.BananaClicker.Controls.Add(this.label3);
             this.BananaClicker.Controls.Add(this.label2);
             this.BananaClicker.Controls.Add(this.button4);
-            this.BananaClicker.Controls.Add(this.BANNa);
             this.BananaClicker.Location = new System.Drawing.Point(4, 22);
             this.BananaClicker.Name = "BananaClicker";
             this.BananaClicker.Padding = new System.Windows.Forms.Padding(3);
             this.BananaClicker.Size = new System.Drawing.Size(536, 256);
             this.BananaClicker.TabIndex = 5;
-            this.BananaClicker.Text = "BananaClicker";
+            this.BananaClicker.Text = "Banana Clicker";
             this.BananaClicker.UseVisualStyleBackColor = true;
+            // 
+            // BANNa
+            // 
+            this.BANNa.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BANNa.BackgroundImage")));
+            this.BANNa.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.BANNa.Location = new System.Drawing.Point(-4, 0);
+            this.BANNa.Name = "BANNa";
+            this.BANNa.Size = new System.Drawing.Size(540, 256);
+            this.BANNa.TabIndex = 1;
+            this.BANNa.Visible = false;
             // 
             // button2
             // 
@@ -232,16 +235,6 @@ namespace MonkeModManager
             this.button4.Text = "Buy Monke (+0.1 Click Power) - $5";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // BANNa
-            // 
-            this.BANNa.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BANNa.BackgroundImage")));
-            this.BANNa.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BANNa.Location = new System.Drawing.Point(-4, 0);
-            this.BANNa.Name = "BANNa";
-            this.BANNa.Size = new System.Drawing.Size(540, 256);
-            this.BANNa.TabIndex = 1;
-            this.BANNa.Visible = false;
             // 
             // Utilities
             // 
@@ -300,7 +293,6 @@ namespace MonkeModManager
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 10;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // buttonDiscordLink
             // 
@@ -465,6 +457,7 @@ namespace MonkeModManager
             this.tabControlMain.Controls.Add(this.Plugins);
             this.tabControlMain.Controls.Add(this.PluginAddons);
             this.tabControlMain.Controls.Add(this.Utilities);
+            this.tabControlMain.Controls.Add(this.GameOptions);
             this.tabControlMain.Controls.Add(this.BananaClicker);
             this.tabControlMain.Location = new System.Drawing.Point(10, 53);
             this.tabControlMain.Name = "tabControlMain";
@@ -472,12 +465,62 @@ namespace MonkeModManager
             this.tabControlMain.Size = new System.Drawing.Size(544, 282);
             this.tabControlMain.TabIndex = 8;
             // 
+            // GameOptions
+            // 
+            this.GameOptions.Controls.Add(this.label4);
+            this.GameOptions.Controls.Add(this.checkBox1);
+            this.GameOptions.Controls.Add(this.button6);
+            this.GameOptions.Controls.Add(this.button3);
+            this.GameOptions.Location = new System.Drawing.Point(4, 22);
+            this.GameOptions.Name = "GameOptions";
+            this.GameOptions.Padding = new System.Windows.Forms.Padding(3);
+            this.GameOptions.Size = new System.Drawing.Size(536, 256);
+            this.GameOptions.TabIndex = 7;
+            this.GameOptions.Text = "Game Options";
+            this.GameOptions.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.Location = new System.Drawing.Point(286, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(252, 85);
+            this.label4.TabIndex = 4;
+            this.label4.Text = resources.GetString("label4.Text");
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.Location = new System.Drawing.Point(3, 6);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(110, 24);
+            this.checkBox1.TabIndex = 2;
+            this.checkBox1.Text = "Run Windowed?";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(119, 227);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(107, 23);
+            this.button6.TabIndex = 1;
+            this.button6.Text = "Run Vanilla";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(6, 227);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(107, 23);
+            this.button3.TabIndex = 0;
+            this.button3.Text = "Run Modded";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(566, 376);
-            this.Controls.Add(this.buttonToggleMods);
             this.Controls.Add(this.buttonModInfo);
             this.Controls.Add(this.labelStatus);
             this.Controls.Add(this.buttonInstall);
@@ -500,9 +543,15 @@ namespace MonkeModManager
             this.PluginAddons.ResumeLayout(false);
             this.Plugins.ResumeLayout(false);
             this.tabControlMain.ResumeLayout(false);
+            this.GameOptions.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.TabPage GameOptions;
         private System.Windows.Forms.Panel BANNa;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button1;
@@ -543,6 +592,5 @@ namespace MonkeModManager
         private System.Windows.Forms.Button buttonDiscordLink;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label labelVersion;
-        private System.Windows.Forms.Button buttonToggleMods;
     }
 }
