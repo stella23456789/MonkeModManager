@@ -7,6 +7,7 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MonkeModManager.Internals;
@@ -25,10 +26,10 @@ namespace MonkeModManager
         private List<ReleaseInfo> releases;
         private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
-        private int CurrentVersion = 10; // actual version is 2.5.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
+        private int CurrentVersion = 11; // actual version is 2.5.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
         public float ClickerMoney;
         public float ClickPower = 1f;
-        public readonly string VersionNumber = "2.5.1.0";
+        public readonly string VersionNumber = "2.6.0.0";
         private int monkeAmount = 5;
 
         public Form1() => InitializeComponent();
@@ -399,7 +400,7 @@ namespace MonkeModManager
                 MessageBox.Show(
                     ex.Message.Contains("403")
                         ? "Failed to fetch info, GitHub has most likely rate limited you, please check back in 15 - 30 minutes"
-                        : "Failed to fetch info, please check your internet connection", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        : "Failed to fetch info, please check your internet connection. If this persists contact \"ngbatz\" on discord via GTMG (https://discord.gg/monkemod)", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 MessageBox.Show("You will still be able to use MMM but you won't be able to install mods.", this.Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 UpdateStatus("Failed to fetch info");
                 return null;
@@ -714,7 +715,7 @@ namespace MonkeModManager
         #endregion
 
         private void button1_Click(object sender, EventArgs e) => Process.Start("https://github.com/the-graze/MonkeModManager/releases/latest");
-        private void pictureBox1_Click(object sender, EventArgs e) => Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+
         private void button2_Click(object sender, EventArgs e)
         {
             if (ClickerMoney < 5000000000) return;
@@ -796,6 +797,125 @@ namespace MonkeModManager
             {
                 Process.Start("steam://rungameid/1533390");
             }
+        }
+        private void button10_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://github.com/arielthemonke/MonkeModManager/releases/latest");
+        }
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+        }
+        private void button8_Click(object sender, EventArgs e)
+        {
+            FindMMMFile();
+        }
+        
+        private async void FindMMMFile()
+        {
+            try
+            {
+                using var fileDialog = new OpenFileDialog();
+                fileDialog.Multiselect = false;
+                fileDialog.Filter = @"MMM Files (.mmm)|*.mmm";
+                fileDialog.FilterIndex = 1;
+
+                if (fileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string path = fileDialog.FileName;
+                    if (Path.GetExtension(path).Equals(".mmm", StringComparison.OrdinalIgnoreCase))
+                    {
+                        UpdateStatus("Installing MMM File...");
+                        await InstallMMMFile(Path.GetFullPath(path));
+                        UpdateStatus("Idle");
+                    }
+                    else
+                    {
+                        MessageBox.Show("That's not an MMM file! Try again.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        public async Task InstallMMMFile(string path)
+        {
+            if (string.IsNullOrEmpty(path) || !File.Exists(path))
+            {
+                MessageBox.Show("Please select a valid MMM file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            else
+            {
+                var p = Path.Combine(Directory.GetCurrentDirectory(), @"temp");
+                byte[] data = File.ReadAllBytes(path);
+                if(!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"temp"))) Directory.CreateDirectory(p);
+                var _installDirectory = InstallDirectory; // This def wasn't because i was lazy trust me
+                UnzipFile(data, p);
+
+                if (File.Exists(Path.Combine(p, "Info.json")))
+                {
+                    var f = JsonToDictionary(Path.Combine(p, "Info.json")); // my honest reaction to you looking at my code stinky
+
+                    if (_installDirectory == null)
+                    {
+                        MessageBox.Show("Run MMM normally and select your install location!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); // i didnt ask on golly
+                    }
+                    
+                    foreach (KeyValuePair<string, string> l in f)
+                    {
+                        switch (l.Key)
+                        {
+                            case "dll":
+                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"))) 
+                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
+                                File.Copy(Path.Combine(p, "mod.dll"), Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}",  $"{l.Value}.dll"));
+                                break;
+                            case "download":
+                                var file = DownloadFile(l.Value);
+                                var fe = Path.GetFileName(l.Value); // i thought i didnt need this but i did huh
+                                var fee = Path.GetFileNameWithoutExtension(l.Value);
+                                
+                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}"))) 
+                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}"));
+                                
+                                if (Path.GetExtension(fe).Equals(".dll", StringComparison.OrdinalIgnoreCase))
+                                    File.WriteAllBytes(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}", fe!), file);
+                                else{
+                                    try { UnzipFile(file, Path.Combine(_installDirectory, $@"BepInEx/plugins/{fee}")); }
+                                    catch (Exception e) {MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);}}
+                                break;
+                            case "zip":
+                                var john = File.ReadAllBytes(Path.Combine(p, "mod.zip"));
+                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"))) 
+                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
+                                UnzipFile(john, Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
+                                break;
+                        }
+                    }
+                }
+                Directory.Delete(Path.Combine(Directory.GetCurrentDirectory(), @"temp"), true);
+            }
+        }
+        
+        private static Dictionary<string, string> JsonToDictionary(string path)
+        {
+            var result = new Dictionary<string, string>();
+    
+            string jsonString = File.ReadAllText(path);
+            JSONNode root = JSON.Parse(jsonString);
+
+            if (root != null && root.IsObject)
+            {
+                var obj = root.AsObject;
+                foreach (var key in obj.Keys)
+                {
+                    result[key] = obj[(string)key].Value;
+                }
+            }
+
+            return result;
         }
     }
 }

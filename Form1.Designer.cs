@@ -48,6 +48,9 @@ namespace MonkeModManager
             this.label2 = new System.Windows.Forms.Label();
             this.button4 = new System.Windows.Forms.Button();
             this.Utilities = new System.Windows.Forms.TabPage();
+            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
@@ -238,6 +241,9 @@ namespace MonkeModManager
             // 
             // Utilities
             // 
+            this.Utilities.Controls.Add(this.button8);
+            this.Utilities.Controls.Add(this.button7);
+            this.Utilities.Controls.Add(this.button10);
             this.Utilities.Controls.Add(this.button1);
             this.Utilities.Controls.Add(this.button5);
             this.Utilities.Controls.Add(this.labelVersion);
@@ -251,6 +257,37 @@ namespace MonkeModManager
             this.Utilities.TabIndex = 1;
             this.Utilities.Text = "Utilities";
             this.Utilities.UseVisualStyleBackColor = true;
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(14, 130);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(132, 23);
+            this.button8.TabIndex = 17;
+            this.button8.Text = "Install MMM File";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(148, 14);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(219, 23);
+            this.button7.TabIndex = 16;
+            this.button7.Text = "Vadix gives me Verified Modder in GTMG!!!\r\nNOT A RICKROLL TRUST ME\r\n";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(14, 101);
+            this.button10.Name = "button10";
+            this.button10.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.button10.Size = new System.Drawing.Size(132, 23);
+            this.button10.TabIndex = 15;
+            this.button10.Text = "Ariel\'s MMM download";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
             // 
             // button1
             // 
@@ -547,6 +584,9 @@ namespace MonkeModManager
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button3;
