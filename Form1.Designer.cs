@@ -40,18 +40,8 @@ namespace MonkeModManager
             this.contextMenuStripMain = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.viewInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buttonModInfo = new System.Windows.Forms.Button();
-            this.BananaClicker = new System.Windows.Forms.TabPage();
-            this.BANNa = new System.Windows.Forms.Panel();
-            this.button2 = new System.Windows.Forms.Button();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.button4 = new System.Windows.Forms.Button();
             this.Utilities = new System.Windows.Forms.TabPage();
             this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.labelVersion = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -78,7 +68,6 @@ namespace MonkeModManager
             this.button6 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.contextMenuStripMain.SuspendLayout();
-            this.BananaClicker.SuspendLayout();
             this.Utilities.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -167,84 +156,9 @@ namespace MonkeModManager
             this.buttonModInfo.UseVisualStyleBackColor = true;
             this.buttonModInfo.Click += new System.EventHandler(this.buttonModInfo_Click);
             // 
-            // BananaClicker
-            // 
-            this.BananaClicker.Controls.Add(this.BANNa);
-            this.BananaClicker.Controls.Add(this.button2);
-            this.BananaClicker.Controls.Add(this.panel1);
-            this.BananaClicker.Controls.Add(this.label3);
-            this.BananaClicker.Controls.Add(this.label2);
-            this.BananaClicker.Controls.Add(this.button4);
-            this.BananaClicker.Location = new System.Drawing.Point(4, 22);
-            this.BananaClicker.Name = "BananaClicker";
-            this.BananaClicker.Padding = new System.Windows.Forms.Padding(3);
-            this.BananaClicker.Size = new System.Drawing.Size(536, 256);
-            this.BananaClicker.TabIndex = 5;
-            this.BananaClicker.Text = "Banana Clicker";
-            this.BananaClicker.UseVisualStyleBackColor = true;
-            // 
-            // BANNa
-            // 
-            this.BANNa.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("BANNa.BackgroundImage")));
-            this.BANNa.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.BANNa.Location = new System.Drawing.Point(-4, 0);
-            this.BANNa.Name = "BANNa";
-            this.BANNa.Size = new System.Drawing.Size(540, 256);
-            this.BANNa.TabIndex = 1;
-            this.BANNa.Visible = false;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(271, 227);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(259, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "Buy High Quality Banana (+100 Click Power) - $5B";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // panel1
-            // 
-            this.panel1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("panel1.BackgroundImage")));
-            this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.panel1.Location = new System.Drawing.Point(315, 79);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(215, 100);
-            this.panel1.TabIndex = 0;
-            this.panel1.Click += new System.EventHandler(this.panel1_Click);
-            // 
-            // label3
-            // 
-            this.label3.Location = new System.Drawing.Point(6, 35);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(524, 27);
-            this.label3.TabIndex = 3;
-            this.label3.Text = "Click Power: 1";
-            // 
-            // label2
-            // 
-            this.label2.Location = new System.Drawing.Point(6, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(524, 27);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Money: $0";
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(6, 227);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(259, 23);
-            this.button4.TabIndex = 1;
-            this.button4.Text = "Buy Monke (+0.1 Click Power) - $5";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
             // Utilities
             // 
             this.Utilities.Controls.Add(this.button8);
-            this.Utilities.Controls.Add(this.button7);
-            this.Utilities.Controls.Add(this.button10);
-            this.Utilities.Controls.Add(this.button1);
             this.Utilities.Controls.Add(this.button5);
             this.Utilities.Controls.Add(this.labelVersion);
             this.Utilities.Controls.Add(this.pictureBox1);
@@ -260,44 +174,13 @@ namespace MonkeModManager
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(14, 130);
+            this.button8.Location = new System.Drawing.Point(14, 72);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(132, 23);
             this.button8.TabIndex = 17;
             this.button8.Text = "Install MMM File";
             this.button8.UseVisualStyleBackColor = true;
             this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(148, 14);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(219, 23);
-            this.button7.TabIndex = 16;
-            this.button7.Text = "Vadix gives me Verified Modder in GTMG!!!\r\nNOT A RICKROLL TRUST ME\r\n";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // button10
-            // 
-            this.button10.Location = new System.Drawing.Point(14, 101);
-            this.button10.Name = "button10";
-            this.button10.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.button10.Size = new System.Drawing.Size(132, 23);
-            this.button10.TabIndex = 15;
-            this.button10.Text = "Ariel\'s MMM download";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(14, 72);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 23);
-            this.button1.TabIndex = 14;
-            this.button1.Text = "Graze\'s MMM download";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button5
             // 
@@ -495,7 +378,6 @@ namespace MonkeModManager
             this.tabControlMain.Controls.Add(this.PluginAddons);
             this.tabControlMain.Controls.Add(this.Utilities);
             this.tabControlMain.Controls.Add(this.GameOptions);
-            this.tabControlMain.Controls.Add(this.BananaClicker);
             this.tabControlMain.Location = new System.Drawing.Point(10, 53);
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
@@ -526,9 +408,9 @@ namespace MonkeModManager
             // 
             // checkBox1
             // 
-            this.checkBox1.Location = new System.Drawing.Point(3, 6);
+            this.checkBox1.Location = new System.Drawing.Point(3, 3);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(110, 24);
+            this.checkBox1.Size = new System.Drawing.Size(110, 20);
             this.checkBox1.TabIndex = 2;
             this.checkBox1.Text = "Run Windowed?";
             this.checkBox1.UseVisualStyleBackColor = true;
@@ -571,7 +453,6 @@ namespace MonkeModManager
             this.Text = "Monke Mod Manager";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.contextMenuStripMain.ResumeLayout(false);
-            this.BananaClicker.ResumeLayout(false);
             this.Utilities.ResumeLayout(false);
             this.Utilities.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -585,27 +466,17 @@ namespace MonkeModManager
             this.PerformLayout();
         }
         private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.TabPage GameOptions;
-        private System.Windows.Forms.Panel BANNa;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.TabPage PluginAddons;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ListView listViewed;
         private System.Windows.Forms.ColumnHeader columnHeader3;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.TabPage BananaClicker;
 
         #endregion
 

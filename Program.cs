@@ -21,7 +21,7 @@ namespace MonkeModManager
             if (args.Length > 0 && File.Exists(args[0]))
             {
                 Form1.InstallDirectory = Properties.Settings.Default.InstallDirectory;
-                _ = f.InstallMMMFile(args[0]);
+                f.InstallMMMFile(args[0]); 
             }
             Application.Run(f);
         }

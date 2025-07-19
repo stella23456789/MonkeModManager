@@ -7,7 +7,6 @@ using System.IO;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
 using MonkeModManager.Internals;
@@ -17,7 +16,7 @@ namespace MonkeModManager
 {
     public partial class Form1 : Form
     {
-
+        // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
         private string DefaultOculusInstallDirectory = @"C:\Program Files\Oculus\Software\Software\another-axiom-gorilla-tag";
         private string DefaultSteamInstallDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Gorilla Tag";
         public static string InstallDirectory = @"";
@@ -26,11 +25,8 @@ namespace MonkeModManager
         private List<ReleaseInfo> releases;
         private List<ReleaseInfo> releasesA;
         private bool modsDisabled;
-        private int CurrentVersion = 11; // actual version is 2.5.0.0 // (big changes update).(Feature update).(minor update).(hotfix)
-        public float ClickerMoney;
-        public float ClickPower = 1f;
-        public readonly string VersionNumber = "2.6.0.0";
-        private int monkeAmount = 5;
+        private int CurrentVersion = 12; // actual version is 2.6.1.0 // (big changes update).(Feature update).(minor update).(hotfix) // i forget to forget fun fact
+        public readonly string VersionNumber = "2.6.1.0"; // Fun fact of the day: this is the version number
 
         public Form1() => InitializeComponent();
 
@@ -258,10 +254,10 @@ namespace MonkeModManager
         }
         private void listViewMods_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
-            buttonModInfo.Enabled = listViewMods.SelectedItems.Count > 0;
+            buttonModInfo.Enabled = listViewMods.SelectedItems.Count > 0; // idk what this is for but i think its important
         }
         void listViewMods_DoubleClick(object sender, EventArgs e) => OpenLinkFromRelease();
-        void viewInfoToolStripMenuItem_Click(object sender, EventArgs e) => OpenLinkFromRelease();
+        void viewInfoToolStripMenuItem_Click(object sender, EventArgs e) => OpenLinkFromRelease(); // why is there 2 of these methods like what
         void buttonDiscordLink_Click(object sender, EventArgs e) => Process.Start("https://discord.gg/monkemod");
 
         private void buttonOpenGameFolder_Click(object sender, EventArgs e)
@@ -291,7 +287,7 @@ namespace MonkeModManager
                 MessageBoxButtons.YesNo);
             if (confirmResult == DialogResult.Yes)
             {
-                UpdateStatus("Uninstalling all mods");
+                UpdateStatus("Removing all mods");
 
                 var pluginsPath = Path.Combine(InstallDirectory, @"BepInEx\plugins");
 
@@ -310,11 +306,11 @@ namespace MonkeModManager
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Something went wrong! Error: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    UpdateStatus("Failed to uninstall mods.");
+                    UpdateStatus("Failed to remove mods.");
                     return;
                 }
 
-                UpdateStatus("All mods uninstalled successfully!");
+                UpdateStatus("All mods removed successfully!");
             }
         }
         void buttonModInfo_Click(object sender, EventArgs e) => OpenLinkFromRelease();
@@ -347,7 +343,7 @@ namespace MonkeModManager
             {
                 InstallDirectory = DefaultSteamInstallDirectory;
                 textBoxDirectory.Text = InstallDirectory;
-                EditmmmConfig(InstallDirectory);
+                EditmmmConfig(InstallDirectory); 
             }
             else if (File.Exists(Path.Combine(DefaultOculusInstallDirectory, "Gorilla Tag.exe")))
             {
@@ -360,9 +356,8 @@ namespace MonkeModManager
                 ShowErrorFindingDirectoryMessage();
             }
 
-            ConfigFix();
+            ConfigFix(); // i forgot about this
             new Thread(LoadRequiredPlugins).Start();
-
         }
 
         private void UpdateStatus(string status)
@@ -514,7 +509,7 @@ namespace MonkeModManager
             {
                 //Invoke so we can call from current thread
                 //Update checkbox's text
-                Dictionary<string, int> includedGroups = new Dictionary<string, int>();
+                Dictionary<string, int> includedGroups = new Dictionary<string, int>(); // is this even used
 
                 for (int i = 0; i < groups.Count(); i++)
                 {
@@ -671,14 +666,11 @@ namespace MonkeModManager
         private void EditmmmConfig(string e)
         {
             Properties.Settings.Default.InstallDirectory = e;
-            InstallDirectory = Properties.Settings.Default.InstallDirectory;
             Properties.Settings.Default.Save();
+            InstallDirectory = Properties.Settings.Default.InstallDirectory;
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            CheckForUpdates();
-        }
+        private void button3_Click(object sender, EventArgs e) => CheckForUpdates();
         private void CheckForUpdates()
         {
             UpdateStatus("Checking for updates...");
@@ -693,38 +685,9 @@ namespace MonkeModManager
                 }));
             }
         }
-        private void panel1_Click(object sender, EventArgs e)
-        {
-            ClickerMoney += ClickPower;
-            label2.Text = $@"Money: ${ClickerMoney}";
-        }
-        private void button4_Click(object sender, EventArgs e)
-        {
-            if (ClickerMoney >= monkeAmount)
-            {
-                ClickerMoney -= monkeAmount;
-                monkeAmount += monkeAmount;
-                label2.Text = $@"Money: ${ClickerMoney}";
-                button4.Text = $@"Buy Monke (+0.1 Click Power) - ${monkeAmount}";
-                ClickPower += 0.1f;
-                label3.Text = $@"Click Power: {ClickPower}";
-            }
-            else UpdateStatus("Not enough money!");
-        }
 
         #endregion
-
-        private void button1_Click(object sender, EventArgs e) => Process.Start("https://github.com/the-graze/MonkeModManager/releases/latest");
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            if (ClickerMoney < 5000000000) return;
-            ClickerMoney -= 5000000000;
-            BANNa.Visible = true;
-            ClickPower += 100f;
-            label2.Text = $@"Money: ${ClickerMoney}";
-            label3.Text = $@"Click Power: {ClickPower}";
-        }
+        
         private void button3_Click_1(object sender, EventArgs e)
         {
             var steam = GetSteamPath();
@@ -735,15 +698,8 @@ namespace MonkeModManager
             if (steam == null && checkBox1.Checked) { MessageBox.Show(@"Looks like we couldn't get your steam path. Try again later" ,@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             
             ToggleMods(true);
-            
-            if (checkBox1.Checked)
-            {
-                Process.Start("\"C:\\Program Files (x86)\\Steam\\steam.exe\" -applaunch 1533390 -windowed");
-            }
-            else
-            {
-                Process.Start("steam://rungameid/1533390");
-            }
+
+            Process.Start(checkBox1.Checked ? "\"C:\\Program Files (x86)\\Steam\\steam.exe\" -applaunch 1533390 -windowed" : "steam://rungameid/1533390");
         }
         private void ToggleMods(bool enableMods)
         {
@@ -752,9 +708,7 @@ namespace MonkeModManager
                 if (enableMods)
                 {
                     if (!File.Exists(Path.Combine(InstallDirectory, "winhttp.dll")))
-                    {
                         File.Move(Path.Combine(InstallDirectory, "mods.disabled"), Path.Combine(InstallDirectory, "winhttp.dll"));
-                    }
                 }
                 else
                 {
@@ -771,7 +725,7 @@ namespace MonkeModManager
         }
 
 
-        private string GetSteamPath()
+        private static string GetSteamPath()
         {
             using RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Software\Valve\Steam");
             object value = key?.GetValue("SteamExe");
@@ -788,30 +742,15 @@ namespace MonkeModManager
             if (steam == null && checkBox1.Checked) { MessageBox.Show(@"Looks like we couldn't get your steam path. Try again later" ,@"Error", MessageBoxButtons.OK, MessageBoxIcon.Error); return; }
             
             ToggleMods(false);
-            
-            if (checkBox1.Checked)
-            {
-                Process.Start("\"C:\\Program Files (x86)\\Steam\\steam.exe\" -applaunch 1533390 -windowed");
-            }
-            else
-            {
-                Process.Start("steam://rungameid/1533390");
-            }
-        }
-        private void button10_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://github.com/arielthemonke/MonkeModManager/releases/latest");
-        }
-        private void button7_Click(object sender, EventArgs e)
-        {
-            Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-        }
-        private void button8_Click(object sender, EventArgs e)
-        {
-            FindMMMFile();
+
+            Process.Start(checkBox1.Checked ? "\"C:\\Program Files (x86)\\Steam\\steam.exe\" -applaunch 1533390 -windowed" : "steam://rungameid/1533390");
+
         }
         
-        private async void FindMMMFile()
+        private void button8_Click(object sender, EventArgs e) => FindMMMFile();
+        
+        
+        private void FindMMMFile()
         {
             try
             {
@@ -826,8 +765,7 @@ namespace MonkeModManager
                     if (Path.GetExtension(path).Equals(".mmm", StringComparison.OrdinalIgnoreCase))
                     {
                         UpdateStatus("Installing MMM File...");
-                        await InstallMMMFile(Path.GetFullPath(path));
-                        UpdateStatus("Idle");
+                        InstallMMMFile(Path.GetFullPath(path));
                     }
                     else
                     {
@@ -840,62 +778,57 @@ namespace MonkeModManager
                 MessageBox.Show(ex.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public async Task InstallMMMFile(string path)
+        public void InstallMMMFile(string path) // i optimised the code i think well i made it slightly less confusing to me at least
         {
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
             {
                 MessageBox.Show("Please select a valid MMM file.", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
+            
+            var p = Path.Combine(Directory.GetCurrentDirectory(), @"temp");
+            byte[] data = File.ReadAllBytes(path);
+            Directory.CreateDirectory(p);
+            UnzipFile(data, p);
+
+            if (File.Exists(Path.Combine(p, "Info.json")))
             {
-                var p = Path.Combine(Directory.GetCurrentDirectory(), @"temp");
-                byte[] data = File.ReadAllBytes(path);
-                if(!Directory.Exists(Path.Combine(Directory.GetCurrentDirectory(), @"temp"))) Directory.CreateDirectory(p);
-                var _installDirectory = InstallDirectory; // This def wasn't because i was lazy trust me
-                UnzipFile(data, p);
+                var f = JsonToDictionary(Path.Combine(p, "Info.json")); // my honest reaction to you looking at my code stinky
 
-                if (File.Exists(Path.Combine(p, "Info.json")))
+                if (InstallDirectory == null)
                 {
-                    var f = JsonToDictionary(Path.Combine(p, "Info.json")); // my honest reaction to you looking at my code stinky
+                    MessageBox.Show("Run MMM normally and select your install location!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); // i didnt ask on golly
+                    return;
+                }
 
-                    if (_installDirectory == null)
+                foreach (KeyValuePair<string, string> l in f)
+                {
+                    switch (l.Key)
                     {
-                        MessageBox.Show("Run MMM normally and select your install location!", "Error!", MessageBoxButtons.OK, MessageBoxIcon.Error); // i didnt ask on golly
-                    }
-                    
-                    foreach (KeyValuePair<string, string> l in f)
-                    {
-                        switch (l.Key)
-                        {
-                            case "dll":
-                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"))) 
-                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
-                                File.Copy(Path.Combine(p, "mod.dll"), Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}",  $"{l.Value}.dll"));
-                                break;
-                            case "download":
-                                var file = DownloadFile(l.Value);
-                                var fe = Path.GetFileName(l.Value); // i thought i didnt need this but i did huh
-                                var fee = Path.GetFileNameWithoutExtension(l.Value);
-                                
-                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}"))) 
-                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}"));
-                                
-                                if (Path.GetExtension(fe).Equals(".dll", StringComparison.OrdinalIgnoreCase))
-                                    File.WriteAllBytes(Path.Combine(_installDirectory, $"BepInEx/plugins/{fee}", fe!), file);
-                                else{
-                                    try { UnzipFile(file, Path.Combine(_installDirectory, $@"BepInEx/plugins/{fee}")); }
-                                    catch (Exception e) {MessageBox.Show(e.Message, @"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);}}
-                                break;
-                            case "zip":
-                                var john = File.ReadAllBytes(Path.Combine(p, "mod.zip"));
-                                if(!Directory.Exists(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"))) 
-                                    Directory.CreateDirectory(Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
-                                UnzipFile(john, Path.Combine(_installDirectory, $"BepInEx/plugins/{l.Value}"));
-                                break;
-                        }
+                        case "dll":
+                            Directory.CreateDirectory(Path.Combine(InstallDirectory, $"BepInEx/plugins/{l.Value}"));
+                            File.Copy(Path.Combine(p, "mod.dll"), Path.Combine(InstallDirectory, $"BepInEx/plugins/{l.Value}", $"{l.Value}.dll"));
+                            break;
+                        case "download":
+                            var file = DownloadFile(l.Value);
+                            var modFolderName = Path.GetFileNameWithoutExtension(l.Value);
+                            
+                            Directory.CreateDirectory(Path.Combine(InstallDirectory, $"BepInEx/plugins/{modFolderName}"));
+
+                            if (Path.GetExtension(Path.GetFileName(l.Value))!.Equals(".dll", StringComparison.OrdinalIgnoreCase))
+                                File.WriteAllBytes(Path.Combine(InstallDirectory, $"BepInEx/plugins/{modFolderName}", Path.GetFileName(l.Value)!), file);
+                            else
+                                UnzipFile(file, Path.Combine(InstallDirectory, $@"BepInEx/plugins/{modFolderName}"));
+                            break;
+                        case "zip":
+                            var john = File.ReadAllBytes(Path.Combine(p, "mod.zip"));
+                            Directory.CreateDirectory(Path.Combine(InstallDirectory, $"BepInEx/plugins/{l.Value}"));
+                            UnzipFile(john, Path.Combine(InstallDirectory, $"BepInEx/plugins/{l.Value}"));
+                            break;
                     }
                 }
                 Directory.Delete(Path.Combine(Directory.GetCurrentDirectory(), @"temp"), true);
+                UpdateStatus("Installed MMM File");
             }
         }
         
@@ -906,13 +839,12 @@ namespace MonkeModManager
             string jsonString = File.ReadAllText(path);
             JSONNode root = JSON.Parse(jsonString);
 
-            if (root != null && root.IsObject)
+            if (root == null || !root.IsObject)
+                return result;
+            JSONObject obj = root.AsObject;
+            foreach (JSONNode key in obj.Keys)
             {
-                var obj = root.AsObject;
-                foreach (var key in obj.Keys)
-                {
-                    result[key] = obj[(string)key].Value;
-                }
+                result[key] = obj[(string)key].Value;
             }
 
             return result;
